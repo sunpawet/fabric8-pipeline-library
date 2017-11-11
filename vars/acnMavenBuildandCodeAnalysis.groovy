@@ -15,7 +15,7 @@ def call(body) {
     withSonarQubeEnv('sonarqube') {
                 sh "mvn versions:set -DnewVersion=${config.version}"
                 sh 'mvn clean package sonar:sonar ' +
-                "-Dsonar.host.url=${SONARQUBE_URL} " +
+                "-Dsonar.host.url=${GLOBAL_VARS['SONARQUBE_URL']} " +
                 "-Dsonar.projectKey=${APP_NAME} " +
                 "-Dsonar.projectName=${APP_NAME} " +
                 "-Dsonar.projectVersion=${APP_VERSION} " +
