@@ -23,6 +23,7 @@ def dockerTagAndPush(appname,version){
     def namespace = utils.getNamespace()
     def newImageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
 
+    sh "docker pull ${newImageName}"
     sh "docker tag ${newImageName} acn-docker-registry.tmn-dev.com/${appname}:${version}"
     if (flow.isSingleNode()) {
         sh "echo 'Running on a single node, skipping docker push as not needed'"
