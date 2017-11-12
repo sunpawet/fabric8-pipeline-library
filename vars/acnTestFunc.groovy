@@ -13,6 +13,7 @@ def call(body) {
     def utils = new io.fabric8.Utils()
 
     def appName = "${config.APP_NAME}"
+    sh "echo \"${config.APP_NAME}\""
     def newVersion = config.VERSION
     dockerTagAndPush(appName,newVersion)
   } // End Function
