@@ -4,7 +4,7 @@ import io.fabric8.Utils
 
 def call(body) {
     // evaluate the body block, and collect configuration into the object
-    def config = [:]
+    def config = [version: '']
     body.resolveStrategy = Closure.DELEGATE_FIRST
     body.delegate = config
     body()
@@ -14,6 +14,7 @@ def call(body) {
 
     def appName = config.APP_NAME
     def newVersion = config.VERSION
+    sh "echo \"newApp=${appName}\""
     dockerTagAndPush(appName,newVersion)
   } // End Function
 
