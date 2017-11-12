@@ -32,7 +32,7 @@ def dockerTagAndPush(appname,version){
                 usernameVariable: 'CDR_USERNAME', 
                 passwordVariable: 'CDR_PASSWORD']]) {
             sh "docker login -u ${CDR_USERNAME} -p ${CDR_PASSWORD} https://acn-docker-registry.tmn-dev.com"
-            sh "docker push acn-docker-registry.tmn-dev.com/${appname}:${version}"
+            sh "docker push acn-docker-registry.tmn-dev.com:443/${appname}:${version}"
         }
     }
 }
