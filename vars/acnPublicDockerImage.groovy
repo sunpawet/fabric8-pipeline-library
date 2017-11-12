@@ -12,7 +12,7 @@ def call(body) {
     def flow = new io.fabric8.Fabric8Commands()
     def utils = new io.fabric8.Utils()
 
-    def appName = config.APP_NAME
+    def appName = config.APPNAME
     def newVersion = config.VERSION
     dockerTagAndPush(appName,newVersion)
   } // End Function
