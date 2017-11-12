@@ -17,6 +17,8 @@ def call(body) {
         def newVersion = config.VERSION
         dockerBuild(appName,newVersion)
     }*/
+    def appName = config.APP_NAME
+    def newVersion = config.VERSION
     dockerBuild(appName,newVersion)
   } // End Function
 
