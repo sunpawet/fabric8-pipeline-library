@@ -23,8 +23,6 @@ def dockerTagAndPush(appname,version){
     def namespace = utils.getNamespace()
     def newImageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
 
-    sh "docker pull ${newImageName}"
-    sh "docker tag ${newImageName} acn-docker-registry.tmn-dev.com/${appname}:${version}"
     if (flow.isSingleNode()) {
         sh "echo 'Running on a single node, skipping docker push as not needed'"
     } else {
@@ -32,6 +30,8 @@ def dockerTagAndPush(appname,version){
                 credentialsId: 'centralize-docker-registry-credential', 
                 usernameVariable: 'CDR_USERNAME', 
                 passwordVariable: 'CDR_PASSWORD']]) {
+            sh "docker pull ${newImageName}"
+            sh "docker tag ${newImageName} acn-docker-registry.tmn-dev.com/${appname}:${version}"
             sh "docker login -u ${CDR_USERNAME} -p ${CDR_PASSWORD} https://acn-docker-registry.tmn-dev.com"
             sh "docker push acn-docker-registry.tmn-dev.com:443/${appname}:${version}"
         }
