@@ -42,14 +42,18 @@ items:
     deploymentYaml = deploymentYaml.replaceAll(/#APP_VERSION#/, config.version)
     deploymentYaml = deploymentYaml.replaceAll(/#IMAGE_URL#/, imageName)
     deploymentYaml = deploymentYaml.replaceAll(/#ENV_NAME#/, config.envName)
-    deploymentYaml = deploymentYaml.replaceAll(/#NUM_OF_REPLICA#/, config.replicaNum)
+    deploymentYaml = deploymentYaml.replaceAll(/#NUM_OF_REPLICA#/, config.replicaNum) + """
+
+"""
     
     //def serviceYaml = new File("${env.WORKSPACE}/pipeline/fabric8-artifacts/service.yaml").getText('UTF-8')
     def serviceYaml = readFile encoding: 'UTF-8', file: 'pipeline/fabric8-artifacts/service.yaml'
     serviceYaml = serviceYaml.replaceAll(/#ENV_NAME#/, config.envName)
     serviceYaml = serviceYaml.replaceAll(/#APP_VERSION#/, config.version)
     serviceYaml = serviceYaml.replaceAll(/#GIT_HASH#/, config.gitHash)
-    serviceYaml = serviceYaml.replaceAll(/#INGRESS_HOSTNAME#/, config.ingressHostname)
+    serviceYaml = serviceYaml.replaceAll(/#INGRESS_HOSTNAME#/, config.ingressHostname) + """
+
+"""
 
   if (flow.isOpenShift()){
     yaml = list + serviceYaml + is + deploymentConfigYaml
