@@ -1,4 +1,6 @@
 #!/usr/bin/groovy
+import io.fabric8.Fabric8Commands
+import io.fabric8.Utils
 
 def call(body) {
     // evaluate the body block, and collect configuration into the object
@@ -9,16 +11,19 @@ def call(body) {
 
     def flow = new io.fabric8.Fabric8Commands()
     def utils = new io.fabric8.Utils()
+    
+    def appName = config.APPNAME
+    def newVersion = config.VERSION
 
     def skipTests = config.skipTests ?: false
 
     withSonarQubeEnv('sonarqube') {
-                sh "mvn versions:set -DnewVersion=${config.VERSION}"
+                sh "mvn versions:set -DnewVersion=${appName}"
                 sh 'mvn clean package sonar:sonar ' +
                 "-Dsonar.host.url=${config.SONARQUBE_URL} " +
-                "-Dsonar.projectKey=${config.APPNAME} " +
-                "-Dsonar.projectName=${config.APPNAME} " +
-                "-Dsonar.projectVersion=${config.VERSION} " +
+                "-Dsonar.projectKey=${appName} " +
+                "-Dsonar.projectName=${appName} " +
+                "-Dsonar.projectVersion=${newVersion} " +
                 '-Dsonar.language=java ' +
                 '-Dsonar.sources=src/ '+
                 '-Dsonar.tests=src/test/ '+
