@@ -18,7 +18,7 @@ def call(body) {
     def skipTests = config.skipTests ?: false
 
     withSonarQubeEnv('sonarqube') {
-                sh "mvn versions:set -DnewVersion=${appName}"
+                sh "mvn versions:set -DnewVersion=${newVersion}"
                 sh 'mvn clean package sonar:sonar ' +
                 "-Dsonar.host.url=${config.SONARQUBE_URL} " +
                 "-Dsonar.projectKey=${appName} " +
