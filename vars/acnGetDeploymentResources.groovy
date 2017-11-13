@@ -36,14 +36,16 @@ items:
     sh "ls -la; pwd"
     def namespace = utils.getNamespace()
     def imageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${config.appName}:${config.version}"
-    def deploymentYaml = new File("${env.WORKSPACE}/pipeline/fabric8-artifacts/deployment.yaml").getText('UTF-8')
+    //def deploymentYaml = new File("${env.WORKSPACE}/pipeline/fabric8-artifacts/deployment.yaml").getText('UTF-8')
+    def deploymentYaml = config.rawDeploymentYaml
     deploymentYaml = deploymentYaml.replaceAll(/#GIT_HASH#/, config.gitHash)
     deploymentYaml = deploymentYaml.replaceAll(/#APP_VERSION#/, config.version)
     deploymentYaml = deploymentYaml.replaceAll(/#IMAGE_URL#/, imageName)
     deploymentYaml = deploymentYaml.replaceAll(/#ENV_NAME#/, config.envName)
     deploymentYaml = deploymentYaml.replaceAll(/#NUM_OF_REPLICA#/, config.replicaNum)
     
-    def serviceYaml = new File("${env.WORKSPACE}/pipeline/fabric8-artifacts/service.yaml").getText('UTF-8')
+    //def serviceYaml = new File("${env.WORKSPACE}/pipeline/fabric8-artifacts/service.yaml").getText('UTF-8')
+    def serviceYaml = config.rawServiceYaml
     serviceYaml = serviceYaml.replaceAll(/#ENV_NAME#/, config.envName)
     serviceYaml = serviceYaml.replaceAll(/#APP_VERSION#/, config.version)
     serviceYaml = serviceYaml.replaceAll(/#GIT_HASH#/, config.gitHash)
