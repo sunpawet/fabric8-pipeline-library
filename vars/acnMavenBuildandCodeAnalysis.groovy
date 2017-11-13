@@ -16,9 +16,9 @@ def call(body) {
                 sh "mvn versions:set -DnewVersion=${config.VERSION}"
                 sh 'mvn clean package sonar:sonar ' +
                 "-Dsonar.host.url=${config.SONARQUBE_URL} " +
-                "-Dsonar.projectKey=${config.APP_NAME} " +
-                "-Dsonar.projectName=${config.APP_NAME} " +
-                "-Dsonar.projectVersion=${config.APP_VERSION} " +
+                "-Dsonar.projectKey=${config.APPNAME} " +
+                "-Dsonar.projectName=${config.APPNAME} " +
+                "-Dsonar.projectVersion=${config.VERSION} " +
                 '-Dsonar.language=java ' +
                 '-Dsonar.sources=src/ '+
                 '-Dsonar.tests=src/test/ '+
