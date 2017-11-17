@@ -33,7 +33,7 @@ apiVersion: v1
 kind: List
 items:
 """
-    sh "ls -la; pwd"
+    
     def namespace = utils.getNamespace()
     def imageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${config.appName}:${config.version}"
     //def deploymentYaml = new File("${env.WORKSPACE}/pipeline/fabric8-artifacts/deployment.yaml").getText('UTF-8')
