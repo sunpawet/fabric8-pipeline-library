@@ -60,11 +60,7 @@ def call(Map parameters = [:], body) {
                                     args: 'cat',
                                     ttyEnabled: true,
                                     alwaysPullImage: false,
-                                    workingDir: '/home/jenkins/',
-                                    //resourceLimitMemory: '640Mi',
-                                    envVars: [
-                                            //envVar(key: '_JAVA_OPTIONS', value: '-Duser.home=/root/ -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xms10m -Xmx192m'),
-                                            envVar(key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/')])],
+                                    workingDir: '/home/jenkins/')],
                     volumes: [
                             secretVolume(secretName: 'jenkins-docker-cfg', mountPath: '/home/jenkins/.docker'),
                             secretVolume(secretName: 'jenkins-release-gpg', mountPath: '/home/jenkins/.gnupg'),
@@ -85,7 +81,7 @@ def call(Map parameters = [:], body) {
                     containers: [
                             [name: 'jnlp', image: "${jnlpImage}", args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins/',
                              resourceLimitMemory: '512Mi'], // needs to be high to work on OSO
-                            [name: 'maven', image: "${mavenImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true, workingDir: '/home/jenkins/',
+                            [name: 'mountebank', image: "${mountebankImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true, workingDir: '/home/jenkins/',
                              resourceLimitMemory: '1024Mi']],
                     volumes: [secretVolume(secretName: 'jenkins-release-gpg', mountPath: '/home/jenkins/.gnupg'),
                               secretVolume(secretName: 'jenkins-hub-api-token', mountPath: '/home/jenkins/.apitoken'),
@@ -103,9 +99,9 @@ def call(Map parameters = [:], body) {
             podTemplate(cloud: cloud, label: label, inheritFrom: "${inheritFrom}",
                     containers: [
                             //[name: 'jnlp', image: "${jnlpImage}", args: '${computer.jnlpmac} ${computer.name}'],
-                            [name: 'maven', image: "${mountebankImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true,
-                    volumes: [
-                              secretVolume(secretName: 'jenkins-docker-cfg', mountPath: '/home/jenkins/.docker'),
+                            [name: 'mountebank', image: "${mountebankImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true,
+                             ]],
+                    volumes: [secretVolume(secretName: 'jenkins-docker-cfg', mountPath: '/home/jenkins/.docker'),
                               secretVolume(secretName: 'jenkins-release-gpg', mountPath: '/home/jenkins/.gnupg'),
                               secretVolume(secretName: 'jenkins-hub-api-token', mountPath: '/home/jenkins/.apitoken'),
                               secretVolume(secretName: 'jenkins-ssh-config', mountPath: '/root/.ssh'),
