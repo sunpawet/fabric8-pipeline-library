@@ -30,7 +30,7 @@ def dockerBuild(appname, version, repositoryName, repositoryTag){
     def namespace = utils.getNamespace()
     def newImageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
 
-    sh "docker pull ${repositoryName}"
+    sh "docker pull ${repositoryName}:${repositoryTag}"
     
     sh "docker tag ${repositoryName}:${repositoryTag} ${newImageName}"
     sh "docker build -t ${newImageName} ."
