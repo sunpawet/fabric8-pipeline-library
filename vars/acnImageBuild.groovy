@@ -19,7 +19,8 @@ def call(body) {
     }*/
     def appName = config.APPNAME
     def newVersion = config.VERSION
-    dockerBuild(appName,newVersion)
+    def images = dockerBuild(appName,newVersion)
+    return images
   } // End Function
 
 def dockerBuild(appname,version){
@@ -35,4 +36,5 @@ def dockerBuild(appname,version){
     } else {
         sh "docker push ${newImageName}"
     }
+    return newImageName
 }

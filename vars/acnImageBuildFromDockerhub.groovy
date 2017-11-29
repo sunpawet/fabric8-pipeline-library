@@ -21,7 +21,8 @@ def call(body) {
     def newVersion = config.VERSION
     def repositoryName = config.REPOSITORYNAME
     def repositoryTag = config.REPOSITORYTAG
-    dockerBuild(appName, newVersion, repositoryName, repositoryTag)
+    def images = dockerBuild(appName, newVersion, repositoryName, repositoryTag)
+    return images
   } // End Function
 
 def dockerBuild(appname, version, repositoryName, repositoryTag){
@@ -40,4 +41,6 @@ def dockerBuild(appname, version, repositoryName, repositoryTag){
     } else {
         sh "docker push ${newImageName}"
     }
+
+    return newImageName;
 }
