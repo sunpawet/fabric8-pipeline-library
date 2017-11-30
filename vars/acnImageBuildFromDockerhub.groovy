@@ -34,7 +34,6 @@ def dockerBuild(appname, version, repositoryName, repositoryTag){
     sh "docker pull ${repositoryName}:${repositoryTag}"
     
     sh "docker tag ${repositoryName}:${repositoryTag} ${newImageName}"
-    sh "docker build -t ${newImageName} ."
 
     if (flow.isSingleNode()) {
         sh "echo 'Running on a single node, skipping docker push as not needed'"
