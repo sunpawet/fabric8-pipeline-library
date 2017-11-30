@@ -27,7 +27,7 @@ def call(body) {
     }*/
 
     // Condition type of fabric8 artifact
-    def typeF8 = application
+    def typeF8 = 'application'
     if ( config.appName == "mountebank" ){
         typeF8 = config.appName
     }
