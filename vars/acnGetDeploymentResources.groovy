@@ -30,7 +30,7 @@ def call(body) {
     def typeF8 = 'application'
     def appName = config.appName
     if ( appName.contains("mountebank") ){
-        typeF8 = appName
+        typeF8 = 'mountebank'
     }
 
     def sha
