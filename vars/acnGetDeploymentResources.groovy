@@ -28,8 +28,9 @@ def call(body) {
 
     // Condition type of fabric8 artifact
     def typeF8 = 'application'
-    if ( config.appName == "mountebank" ){
-        typeF8 = config.appName
+    def appName = config.appName
+    if ( appName.contains("mountebank") ){
+        typeF8 = appName
     }
 
     def sha
