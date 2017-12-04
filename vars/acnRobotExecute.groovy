@@ -15,7 +15,7 @@ def call(body) {
     def appName = config.APPNAME
     def appVersion = config.VERSION
 
-    pullGitRobot(appName, appVersion)
+    // pullGitRobot(appName, appVersion)
     executeRobot(appName, appVersion)
   } // End Function
 
