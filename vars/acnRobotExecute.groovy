@@ -17,6 +17,6 @@ def call(body) {
 
     sh "echo appName ${appName}"
     sh "echo appVersion ${appVersion}"
-    sh "docker images |grep ascendcorphub/robot"
+    // sh "docker images |grep ascendcorphub/robot"
     
 } // End Function
