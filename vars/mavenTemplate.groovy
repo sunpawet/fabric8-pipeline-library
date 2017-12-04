@@ -26,12 +26,6 @@ def call(Map parameters = [:], body) {
                                     image: "${jnlpImage}",
                                     args: '${computer.jnlpmac} ${computer.name}',
                                     workingDir: '/home/jenkins/',
-                                    resourceLimitMemory: '512Mi'), // needs to be high to work on OSO
-                            containerTemplate(
-                                    name: 'robot',
-                                    image: "${robotImage}",
-                                    args: 'cat',
-                                    workingDir: '/home/jenkins/',
                                     resourceLimitMemory: '512Mi')],
                     volumes: [
                             secretVolume(secretName: 'jenkins-maven-settings', mountPath: '/root/.m2'),
