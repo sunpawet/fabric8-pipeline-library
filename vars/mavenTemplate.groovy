@@ -75,7 +75,7 @@ def call(Map parameters = [:], body) {
                                     args: 'cat',
                                     ttyEnabled: true,
                                     alwaysPullImage: false,
-                                    workingDir: '/home/jenkins/'ม
+                                    workingDir: '/home/jenkins/',
                                     envVars: [
                                             envVar(key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/')])],
                     volumes: [
