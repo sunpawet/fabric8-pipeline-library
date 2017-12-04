@@ -33,9 +33,7 @@ def pullGitRobot(appName, appVersion){
     def GIT_USERNAME = 'kwanchanok.sku@ascendcorp.com'
     def GIT_PASSWORD = 'Nok*0379'
 
-    sh "git init"
-    sh "git remote add origin https://${GIT_USERNAME}:${GIT_PASSWORD}@bitbucket.org/ascendcorp/demo-peacock-robot.git"
-    sh "git pull origin master"
+    sh "git pull https://${GIT_USERNAME}:${GIT_PASSWORD}@bitbucket.org/ascendcorp/demo-peacock-robot.git master"
     sh "pwd; ls -la"
 }
 
