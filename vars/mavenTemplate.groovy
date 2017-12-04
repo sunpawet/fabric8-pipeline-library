@@ -10,7 +10,6 @@ def call(Map parameters = [:], body) {
     def label = parameters.get('label', defaultLabel)
 
     def mavenImage = parameters.get('mavenImage', 'fabric8/maven-builder:v7973e33')
-    def robotImage = parameters.get('robotImage', 'ascendcorphub/robot:v1.0.0')
     def jnlpImage = (flow.isOpenShift()) ? 'fabric8/jenkins-slave-base-centos7:0.0.1' : 'jenkinsci/jnlp-slave:2.62'
     def inheritFrom = parameters.get('inheritFrom', 'base')
 
@@ -66,17 +65,6 @@ def call(Map parameters = [:], body) {
                                     envVars: [
                                             //envVar(key: '_JAVA_OPTIONS', value: '-Duser.home=/root/ -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xms10m -Xmx192m'),
                                             envVar(key: 'MAVEN_OPTS', value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'),
-                                            envVar(key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/')]),
-                            containerTemplate (
-                                    //[name: 'jnlp', image: "${jnlpImage}", args: '${computer.jnlpmac} ${computer.name}'],
-                                    name: 'robot',
-                                    image: "ascendcorphub/robot:v1.0.0",
-                                    command: '/bin/sh -c',
-                                    args: 'cat',
-                                    ttyEnabled: true,
-                                    alwaysPullImage: false,
-                                    workingDir: '/home/jenkins/',
-                                    envVars: [
                                             envVar(key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/')])],
                     volumes: [
                             secretVolume(secretName: 'jenkins-maven-settings', mountPath: '/root/.m2'),
