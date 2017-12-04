@@ -70,7 +70,7 @@ def call(Map parameters = [:], body) {
                             containerTemplate (
                                     //[name: 'jnlp', image: "${jnlpImage}", args: '${computer.jnlpmac} ${computer.name}'],
                                     name: 'robot',
-                                    image: "${robotImage}",
+                                    image: "${mavenImage}",
                                     command: '/bin/sh -c',
                                     args: 'cat',
                                     ttyEnabled: true,
