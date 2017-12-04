@@ -71,7 +71,16 @@ def call(Map parameters = [:], body) {
                                     envVars: [
                                             //envVar(key: '_JAVA_OPTIONS', value: '-Duser.home=/root/ -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xms10m -Xmx192m'),
                                             envVar(key: 'MAVEN_OPTS', value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'),
-                                            envVar(key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/')])],
+                                            envVar(key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/')]),
+                            containerTemplate (
+                                    //[name: 'jnlp', image: "${jnlpImage}", args: '${computer.jnlpmac} ${computer.name}'],
+                                    name: 'mountebank',
+                                    image: "${mountebankImage}",
+                                    command: '/bin/sh -c',
+                                    args: 'cat',
+                                    ttyEnabled: true,
+                                    alwaysPullImage: false,
+                                    workingDir: '/home/jenkins/')],
                     volumes: [
                             secretVolume(secretName: 'jenkins-maven-settings', mountPath: '/root/.m2'),
                             secretVolume(secretName: 'jenkins-docker-cfg', mountPath: '/home/jenkins/.docker'),
