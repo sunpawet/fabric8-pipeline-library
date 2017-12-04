@@ -15,8 +15,7 @@ def call(body) {
     def appName = config.APPNAME
     def appVersion = config.VERSION
 
-    sh "echo appName ${appName}"
-    sh "echo appVersion ${appVersion}"
+    sh "echo appName"
     // sh "docker images |grep ascendcorphub/robot"
     
 } // End Function
