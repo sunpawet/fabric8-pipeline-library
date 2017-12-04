@@ -75,7 +75,9 @@ def call(Map parameters = [:], body) {
                                     args: 'cat',
                                     ttyEnabled: true,
                                     alwaysPullImage: false,
-                                    workingDir: '/home/jenkins/')],
+                                    workingDir: '/home/jenkins/'ม
+                                    envVars: [
+                                            envVar(key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/')])],
                     volumes: [
                             secretVolume(secretName: 'jenkins-maven-settings', mountPath: '/root/.m2'),
                             secretVolume(secretName: 'jenkins-docker-cfg', mountPath: '/home/jenkins/.docker'),
