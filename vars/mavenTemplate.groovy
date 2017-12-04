@@ -69,8 +69,8 @@ def call(Map parameters = [:], body) {
                                             envVar(key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/')]),
                             containerTemplate (
                                     //[name: 'jnlp', image: "${jnlpImage}", args: '${computer.jnlpmac} ${computer.name}'],
-                                    name: 'mountebank',
-                                    image: "${mountebankImage}",
+                                    name: 'robot',
+                                    image: "${robotImage}",
                                     command: '/bin/sh -c',
                                     args: 'cat',
                                     ttyEnabled: true,
