@@ -24,6 +24,8 @@ def executeRobot(appname, appVersion){
     def namespace = utils.getNamespace()
 
     sh "echo 'appname ${appname}'"
+    sh "docker pull ascendcorphub/robot:v1.0.0"
+    sh "pwd"
     if (flow.isSingleNode()) {
         sh "echo 'Running on a single node, skipping docker push as not needed'"
     } else {
