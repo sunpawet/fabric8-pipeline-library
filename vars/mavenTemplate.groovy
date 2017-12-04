@@ -10,6 +10,7 @@ def call(Map parameters = [:], body) {
     def label = parameters.get('label', defaultLabel)
 
     def mavenImage = parameters.get('mavenImage', 'fabric8/maven-builder:v7973e33')
+    def robotImage = parameters.get('robotImage', 'ascendcorphub/robot:v1.0.0')
     def jnlpImage = (flow.isOpenShift()) ? 'fabric8/jenkins-slave-base-centos7:0.0.1' : 'jenkinsci/jnlp-slave:2.62'
     def inheritFrom = parameters.get('inheritFrom', 'base')
 
@@ -28,17 +29,11 @@ def call(Map parameters = [:], body) {
                                     workingDir: '/home/jenkins/',
                                     resourceLimitMemory: '512Mi'), // needs to be high to work on OSO
                             containerTemplate(
-                                    name: 'maven',
-                                    image: "${mavenImage}",
-                                    command: '/bin/sh -c',
+                                    name: 'robot',
+                                    image: "${robotImage}",
                                     args: 'cat',
-                                    ttyEnabled: true,
                                     workingDir: '/home/jenkins/',
-                                    envVars: [
-                                            envVar(key: '_JAVA_OPTIONS', value: '-Duser.home=/root/ -XX:+UseParallelGC -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xmx256m'),
-                                            envVar(key: 'MAVEN_OPTS', value: '-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn')
-                                            ],
-                                    resourceLimitMemory: '1024Mi')],
+                                    resourceLimitMemory: '512Mi')],
                     volumes: [
                             secretVolume(secretName: 'jenkins-maven-settings', mountPath: '/root/.m2'),
                             persistentVolumeClaim(claimName: 'jenkins-mvn-local-repo', mountPath: '/root/.mvnrepository'),
