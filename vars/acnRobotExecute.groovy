@@ -15,7 +15,19 @@ def call(body) {
     def appName = config.APPNAME
     def appVersion = config.VERSION
 
-    // sh "echo 'appName'"
-    // sh "docker images |grep ascendcorphub/robot"
-    
-} // End Function
+    executeRobot(appName, appVersion)
+  } // End Function
+
+def executeRobot(appname, appVersion){
+    def utils = new Utils()
+    def flow = new Fabric8Commands()
+    def namespace = utils.getNamespace()
+
+    sh "echo 'appname ${appname}'"
+    if (flow.isSingleNode()) {
+        sh "echo 'Running on a single node, skipping docker push as not needed'"
+    } else {
+        sh "echo 'appname ${appname}-${appVersion}'"
+    }
+    // return newImageName
+}
