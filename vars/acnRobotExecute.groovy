@@ -25,7 +25,7 @@ def pullGitRobot(appName, appVersion){
     def flow = new Fabric8Commands()
     def namespace = utils.getNamespace()
 
-    sh "mkdir robot"
+    sh "mkdir -p /home/jenkins/workspace/${appName}/robot"
     sh "pwd"
     // /home/jenkins/workspace/demo-peacock/robot
     sh "cd /home/jenkins/workspace/${appName}/robot"
