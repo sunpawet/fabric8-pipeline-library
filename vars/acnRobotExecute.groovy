@@ -36,9 +36,9 @@ def executeRobot(appName, appVersion){
     def cmdCreateDirectory = "mkdir -p /opt/robotframework/tests/${appName}/results"
     def cmdDirectory = "cd /opt/robotframework/tests/${appName}/"
     def cmdRobot = "robot -L Trace -d /opt/robotframework/tests/${appName}/results /opt/robotframework/tests/${appName}"
-    def cmdEchoResult = "echo $?"
+    // def cmdEchoResult = "echo $?"
 
-    sh "docker run -dti -v /home/jenkins/workspace/${appName}/robot/${appName}:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash -c \"${cmdInstallLib}\; ${cmdCreateDirectory}\; ${cmdDirectory}\; ${cmdRobot}\; ${cmdEchoResult}\" "
+    sh "docker run -dti -v /home/jenkins/workspace/${appName}/robot/${appName}:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash -c \"${cmdInstallLib}\; ${cmdCreateDirectory}\; ${cmdDirectory}\; ${cmdRobot}\" "
 
     if (flow.isSingleNode()) {
         sh "echo 'Running on a single node, skipping docker push as not needed'"
