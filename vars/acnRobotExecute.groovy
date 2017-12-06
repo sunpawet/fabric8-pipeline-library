@@ -47,6 +47,19 @@ def executeRobot(appName, appVersion){
 
     sh "echo ${containerId}"
 
+    waitUntil{
+        def containerIdAlive = sh(
+            script: "docker ps |grep ${containerId}",
+            returnStatus: true
+        ) == 0
+
+        if (!containerIdAlive) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     if (flow.isSingleNode()) {
         sh "echo 'Running on a single node, skipping docker push as not needed'"
     } else {
