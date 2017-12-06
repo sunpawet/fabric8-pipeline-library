@@ -35,7 +35,7 @@ def executeRobot(appName, appVersion){
     def cmdInstallLib = "pip install -r /opt/robotframework/tests/${appName}/requirements.txt"
     def cmdCreateDirectory = "mkdir -p /opt/robotframework/tests/${appName}/results"
     def cmdDirectory = "cd /opt/robotframework/tests/${appName}/"
-    def cmdRobot = "robot -L Trace -d /opt/robotframework/tests/${appName}/results /opt/robotframework/tests/${appName}"
+    def cmdRobot = "robot -L Trace -d /opt/robotframework/tests/${appName}/results /opt/robotframework/tests/${appName}/testcases"
     // def cmdEchoResult = "echo $?"
 
     sh "docker run -dti --name=${appName}-${appVersion} -v /home/jenkins/workspace/${appName}/robot/${appName}:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash -c '${cmdInstallLib}; ${cmdCreateDirectory}; ${cmdDirectory}; ${cmdRobot}'"
