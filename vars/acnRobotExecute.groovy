@@ -42,7 +42,8 @@ def executeRobot(appName, appVersion){
 
     def containerId = sh(
         script: "docker ps -f name=${appName}-${appVersion} -q"
-    )
+        returnStatus: true
+    ) == 0
 
     sh "echo ${containerId}"
 
