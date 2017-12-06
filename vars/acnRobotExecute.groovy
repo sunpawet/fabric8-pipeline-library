@@ -38,9 +38,9 @@ def executeRobot(appName, appVersion){
     def cmdRobot = "robot -L Trace -d /opt/robotframework/tests/${appName}/results /opt/robotframework/tests/${appName}"
     // def cmdEchoResult = "echo $?"
 
-    sh "imagesRBT=$(docker run -dti -v /home/jenkins/workspace/${appName}/robot/${appName}:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash -c '${cmdInstallLib}; ${cmdCreateDirectory}; ${cmdDirectory}; ${cmdRobot}') "
+    sh "docker run -dti -v /home/jenkins/workspace/${appName}/robot/${appName}:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash -c '${cmdInstallLib}; ${cmdCreateDirectory}; ${cmdDirectory}; ${cmdRobot}' "
 
-    sh "echo 'imagesRBT ${imagesRBT}'"
+    sh "docker ps"
 
     if (flow.isSingleNode()) {
         sh "echo 'Running on a single node, skipping docker push as not needed'"
