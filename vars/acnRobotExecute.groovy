@@ -60,6 +60,8 @@ def executeRobot(appName, appVersion){
         }
     }
 
+    sh "cat /home/jenkins/workspace/${appName}/robot/${appName}/results/log.html"
+
     if (flow.isSingleNode()) {
         sh "echo 'Running on a single node, skipping docker push as not needed'"
     } else {
