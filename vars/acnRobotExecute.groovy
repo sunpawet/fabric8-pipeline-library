@@ -55,7 +55,7 @@ def executeRobot(appName, appVersion){
             script: "docker ps |grep ${containerId}",
             returnStatus: true
         ) == 0
-
+        sh "echo ${containerIdAlive}"
         if (containerIdAlive) {
             return true;
         }else{
