@@ -41,29 +41,30 @@ def executeRobot(appName, appVersion){
 
     sh "cat /home/jenkins/workspace/${appName}/robot/demo-peacock/testcases/test2.robot"
 
-    sh "docker run -dti --name=${appName}-${appVersion} -v /home/jenkins/workspace/${appName}/robot/demo-peacock:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash -c '${cmdInstallLib}; ${cmdCreateDirectory}; ${cmdDirectory}; ${cmdRobot}'"
+    // sh "docker run -dti --name=${appName}-${appVersion} -v /home/jenkins/workspace/${appName}/robot/demo-peacock:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash -c '${cmdInstallLib}; ${cmdCreateDirectory}; ${cmdDirectory}; ${cmdRobot}'"
+    sh "docker run -dti --name=${appName}-${appVersion} -v /home/jenkins/workspace/${appName}/robot/demo-peacock:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash"
 
-    def containerId = sh(
-        script: "docker ps -f name=${appName}-${appVersion} -q",
-        returnStdout: true
-    ).trim()
+    // def containerId = sh(
+    //     script: "docker ps -f name=${appName}-${appVersion} -q",
+    //     returnStdout: true
+    // ).trim()
 
-    sh "echo ${containerId}"
+    // sh "echo ${containerId}"
 
-    waitUntil{
-        def containerIdAlive = sh(
-            script: "docker ps |grep ${containerId}",
-            returnStatus: true
-        ) == 0
-        sh "echo ${containerIdAlive}"
-        if (containerIdAlive) {
-            return true;
-        }else{
-            return false;
-        }
-    }
+    // waitUntil{
+    //     def containerIdAlive = sh(
+    //         script: "docker ps |grep ${containerId}",
+    //         returnStatus: true
+    //     ) == 0
+    //     sh "echo ${containerIdAlive}"
+    //     if (containerIdAlive) {
+    //         return true;
+    //     }else{
+    //         return false;
+    //     }
+    // }
 
-    sh "cat /home/jenkins/workspace/${appName}/robot/${appName}/results/log.html"
+    // sh "cat /home/jenkins/workspace/${appName}/robot/${appName}/results/log.html"
 
     if (flow.isSingleNode()) {
         sh "echo 'Running on a single node, skipping docker push as not needed'"
