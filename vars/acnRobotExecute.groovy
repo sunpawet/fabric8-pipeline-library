@@ -40,7 +40,11 @@ def executeRobot(appName, appVersion){
 
     sh "docker run -dti --name=${appName}-${appVersion} -v /home/jenkins/workspace/${appName}/robot/${appName}:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash -c '${cmdInstallLib}; ${cmdCreateDirectory}; ${cmdDirectory}; ${cmdRobot}'"
 
-    sh "docker ps -f name=${appName}-${appVersion} -q"
+    def containerId = sh(
+        script: "docker ps -f name=${appName}-${appVersion} -q"
+    )
+
+    sh "echo ${containerId}"
 
     if (flow.isSingleNode()) {
         sh "echo 'Running on a single node, skipping docker push as not needed'"
