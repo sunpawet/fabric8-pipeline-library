@@ -56,7 +56,7 @@ def executeRobot(appName, appVersion){
             returnStatus: true
         ) == 0
 
-        if (!containerIdAlive) {
+        if (containerIdAlive) {
             return true;
         }else{
             return false;
