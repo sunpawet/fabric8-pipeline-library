@@ -70,7 +70,7 @@ def call(Map parameters = [:], body) {
                             hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
                             persistentVolumeClaim(mountPath: '/root/data/pvc', claimName: 'nfs-robot', readOnly: false),
                             // nfsVolume(mountPath: '/root/data/nfs', serverAddress: '35.200.192.59', serverPath: '/var/nfsshare', readOnly: false)
-                            hostPathVolume(hostPath: '/home/jenkins/workspace', mountPath: '/home/jenkins/workspace')])
+                            hostPathVolume(hostPath: '/home/jenkins/workspace', mountPath: '/root/home/opt/robot')])
                     {
 
                         body(
