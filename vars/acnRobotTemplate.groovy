@@ -34,7 +34,7 @@ def call(Map parameters = [:], body) {
                             //resourceLimitMemory: '640Mi',
                             envVars: [
                                     //envVar(key: '_JAVA_OPTIONS', value: '-Duser.home=/root/ -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xms10m -Xmx192m'),
-                                    envVar(key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/')])],
+                                    [key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/']])],
             volumes: [
                     secretVolume(secretName: 'jenkins-docker-cfg', mountPath: '/home/jenkins/.docker'),
                     secretVolume(secretName: 'jenkins-release-gpg', mountPath: '/home/jenkins/.gnupg'),
