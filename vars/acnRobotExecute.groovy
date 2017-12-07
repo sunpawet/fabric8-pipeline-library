@@ -40,6 +40,7 @@ def executeRobot(appName, appVersion){
     // /home/jenkins/workspace/peacock-poc/robot/demo-peacock
 
     sh "cat /home/jenkins/workspace/${appName}/robot/demo-peacock/testcases/test2.robot"
+    sh "sleep 10000"
 
     // sh "docker run -dti --name=${appName}-${appVersion} -v /home/jenkins/workspace/${appName}/robot/demo-peacock:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash -c '${cmdInstallLib}; ${cmdCreateDirectory}; ${cmdDirectory}; ${cmdRobot}'"
     sh "docker run -dti --name=${appName}-${appVersion} -v /home/jenkins/workspace/${appName}/robot/demo-peacock:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash"
