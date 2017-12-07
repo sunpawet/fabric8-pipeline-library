@@ -107,7 +107,7 @@ def call(Map parameters = [:], body) {
                 )
             }
         } else {
-            echo "building using the docker socket"
+            echo "MVN building using the docker socket"
 
             podTemplate(
                     cloud: cloud, 
@@ -120,10 +120,11 @@ def call(Map parameters = [:], body) {
                                 envVars: [
                                     [key: 'MAVEN_OPTS', value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn']
                                 ]
-                            ],
-                            [
-                                name: 'robot', image: "${robotImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true, workingDir: '/home/jenkins/'
                             ]
+                            // ,
+                            // [
+                            //     name: 'robot', image: "${robotImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true, workingDir: '/home/jenkins/'
+                            // ]
                     ],
                     volumes: [
                         secretVolume(secretName: 'jenkins-maven-settings', mountPath: '/root/.m2'),
@@ -134,7 +135,7 @@ def call(Map parameters = [:], body) {
                         secretVolume(secretName: 'jenkins-ssh-config', mountPath: '/root/.ssh'),
                         secretVolume(secretName: 'jenkins-git-ssh', mountPath: '/root/.ssh-git'),
                         hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
-                        hostPathVolume(hostPath: '/home/jenkins/workspace', mountPath: '/home/jenkins/workspace')
+                        // hostPathVolume(hostPath: '/home/jenkins/workspace', mountPath: '/home/jenkins/workspace')
                     ],
                     envVars: [
                         [key: 'DOCKER_HOST', value: 'unix:/var/run/docker.sock'], [key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/']
