@@ -24,7 +24,8 @@ def executeRobot(appName, appVersion){
     def flow = new Fabric8Commands()
     def namespace = utils.getNamespace()
 
-    sh "cd /home/jenkins/workspace/${appName}"
+    // sh "cd /home/jenkins/workspace/${appName}"
+    sh "cd /home/jenkins/workspace/demo-peacock"
     sh "echo 'appName ${appName}'"
     sh "docker pull ascendcorphub/robot:v1.0.0"
     sh "pwd"
@@ -39,7 +40,8 @@ def executeRobot(appName, appVersion){
     // def cmdEchoResult = "echo $?"
     // /home/jenkins/workspace/peacock-poc/robot/demo-peacock
 
-    sh "cat /home/jenkins/workspace/${appName}/robot/demo-peacock/testcases/test2.robot"
+    // sh "cat /home/jenkins/workspace/${appName}/robot/demo-peacock/testcases/test2.robot"
+    sh "cat /home/jenkins/workspace/demo-peacock/robot/demo-peacock/testcases/test2.robot"
     sh "sleep 10000"
 
     // sh "docker run -dti --name=${appName}-${appVersion} -v /home/jenkins/workspace/${appName}/robot/demo-peacock:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash -c '${cmdInstallLib}; ${cmdCreateDirectory}; ${cmdDirectory}; ${cmdRobot}'"
