@@ -68,7 +68,8 @@ def call(Map parameters = [:], body) {
                             secretVolume(secretName: 'jenkins-ssh-config', mountPath: '/root/.ssh'),
                             secretVolume(secretName: 'jenkins-git-ssh', mountPath: '/root/.ssh-git'),
                             hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
-                            persistentVolumeClaim(claimName: 'nfs-robot', mountPath: '/root/robot-result')])
+                            persistentVolumeClaim(mountPath: '/data/pvc', claimName: 'nfs-robot', readOnly: false),
+                            nfsVolume(mountPath: '/data/nfs', serverAddress: '35.200.192.59', serverPath: '/var/nfsshare', readOnly: false)])
                     {
 
                         body(
