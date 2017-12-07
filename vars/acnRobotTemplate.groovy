@@ -26,16 +26,10 @@ def call(Map parameters = [:], body) {
                                     image: "${jnlpImage}",
                                     args: '${computer.jnlpmac} ${computer.name}',
                                     workingDir: '/home/jenkins/',
-                                    resourceLimitMemory: '512Mi'), // needs to be high to work on OSO
-                            containerTemplate(
-                                    name: 'robot',
-                                    image: "${robotImage}",
-                                    command: '/bin/sh -c',
-                                    args: 'cat',
-                                    ttyEnabled: true,
-                                    workingDir: '/home/jenkins/',
-                                    resourceLimitMemory: '1024Mi')],
+                                    resourceLimitMemory: '512Mi')],
                     volumes: [
+                            secretVolume(secretName: 'jenkins-maven-settings', mountPath: '/root/.m2'),
+                            persistentVolumeClaim(claimName: 'jenkins-mvn-local-repo', mountPath: '/root/.mvnrepository'),
                             secretVolume(secretName: 'jenkins-release-gpg', mountPath: '/home/jenkins/.gnupg'),
                             secretVolume(secretName: 'jenkins-hub-api-token', mountPath: '/home/jenkins/.apitoken'),
                             secretVolume(secretName: 'jenkins-ssh-config', mountPath: '/root/.ssh'),
@@ -72,6 +66,8 @@ def call(Map parameters = [:], body) {
                             secretVolume(secretName: 'jenkins-ssh-config', mountPath: '/root/.ssh'),
                             secretVolume(secretName: 'jenkins-git-ssh', mountPath: '/root/.ssh-git'),
                             hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
+                            persistentVolumeClaim(mountPath: '/root/data/pvc', claimName: 'nfs-robot', readOnly: false),
+                            nfsVolume(mountPath: '/home/jenkins/workspace', serverAddress: '35.200.192.59', serverPath: '/var/nfsshare', readOnly: false),
                             hostPathVolume(hostPath: '/home/jenkins/workspace', mountPath: '/home/jenkins/workspace')])
                     {
 
@@ -110,8 +106,11 @@ def call(Map parameters = [:], body) {
             podTemplate(cloud: cloud, label: label, inheritFrom: "${inheritFrom}",
                     containers: [
                             //[name: 'jnlp', image: "${jnlpImage}", args: '${computer.jnlpmac} ${computer.name}'],
-                            [name: 'robot', image: "${robotImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true,
-                    volumes: [
+                            [name: 'maven', image: "${mavenImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true,
+                             envVars: [
+                                     [key: 'MAVEN_OPTS', value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn']]]],
+                    volumes: [secretVolume(secretName: 'jenkins-maven-settings', mountPath: '/root/.m2'),
+                              persistentVolumeClaim(claimName: 'jenkins-mvn-local-repo', mountPath: '/root/.mvnrepository'),
                               secretVolume(secretName: 'jenkins-docker-cfg', mountPath: '/home/jenkins/.docker'),
                               secretVolume(secretName: 'jenkins-release-gpg', mountPath: '/home/jenkins/.gnupg'),
                               secretVolume(secretName: 'jenkins-hub-api-token', mountPath: '/home/jenkins/.apitoken'),
