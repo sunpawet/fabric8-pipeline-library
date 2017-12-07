@@ -59,8 +59,11 @@ def call(Map parameters = [:], body) {
                                     //resourceLimitMemory: '640Mi',
                                     envVars: [
                                             //envVar(key: '_JAVA_OPTIONS', value: '-Duser.home=/root/ -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xms10m -Xmx192m'),
-                                            envVar(key: 'MAVEN_OPTS', value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'),
-                                            envVar(key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/')])],
+                                        envVar(key: 'MAVEN_OPTS', value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'),
+                                        envVar(key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/')
+                                    ]
+                            )
+                    ],
                     volumes: [
                             secretVolume(secretName: 'jenkins-maven-settings', mountPath: '/root/.m2'),
                             secretVolume(secretName: 'jenkins-docker-cfg', mountPath: '/home/jenkins/.docker'),
@@ -106,23 +109,36 @@ def call(Map parameters = [:], body) {
         } else {
             echo "building using the docker socket"
 
-            podTemplate(cloud: cloud, label: label, inheritFrom: "${inheritFrom}",
+            podTemplate(
+                    cloud: cloud, 
+                    label: label, 
+                    inheritFrom: "${inheritFrom}",
                     containers: [
                             //[name: 'jnlp', image: "${jnlpImage}", args: '${computer.jnlpmac} ${computer.name}'],
-                            [name: 'maven', image: "${mavenImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true,
-                             envVars: [
-                                     [key: 'MAVEN_OPTS', value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn']]],
-                            [name: 'robot', image: "${robotImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true, workingDir: '/home/jenkins/'],
-                    volumes: [secretVolume(secretName: 'jenkins-maven-settings', mountPath: '/root/.m2'),
-                              persistentVolumeClaim(claimName: 'jenkins-mvn-local-repo', mountPath: '/root/.mvnrepository'),
-                              secretVolume(secretName: 'jenkins-docker-cfg', mountPath: '/home/jenkins/.docker'),
-                              secretVolume(secretName: 'jenkins-release-gpg', mountPath: '/home/jenkins/.gnupg'),
-                              secretVolume(secretName: 'jenkins-hub-api-token', mountPath: '/home/jenkins/.apitoken'),
-                              secretVolume(secretName: 'jenkins-ssh-config', mountPath: '/root/.ssh'),
-                              secretVolume(secretName: 'jenkins-git-ssh', mountPath: '/root/.ssh-git'),
-                              hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
-                              hostPathVolume(hostPath: '/home/jenkins/workspace', mountPath: '/home/jenkins/workspace')],
-                    envVars: [[key: 'DOCKER_HOST', value: 'unix:/var/run/docker.sock'], [key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/']]
+                            [
+                                name: 'maven', image: "${mavenImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true,
+                                envVars: [
+                                    [key: 'MAVEN_OPTS', value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn']
+                                ]
+                            ],
+                            [
+                                name: 'robot', image: "${robotImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true, workingDir: '/home/jenkins/'
+                            ]
+                    ],
+                    volumes: [
+                        secretVolume(secretName: 'jenkins-maven-settings', mountPath: '/root/.m2'),
+                        persistentVolumeClaim(claimName: 'jenkins-mvn-local-repo', mountPath: '/root/.mvnrepository'),
+                        secretVolume(secretName: 'jenkins-docker-cfg', mountPath: '/home/jenkins/.docker'),
+                        secretVolume(secretName: 'jenkins-release-gpg', mountPath: '/home/jenkins/.gnupg'),
+                        secretVolume(secretName: 'jenkins-hub-api-token', mountPath: '/home/jenkins/.apitoken'),
+                        secretVolume(secretName: 'jenkins-ssh-config', mountPath: '/root/.ssh'),
+                        secretVolume(secretName: 'jenkins-git-ssh', mountPath: '/root/.ssh-git'),
+                        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
+                        hostPathVolume(hostPath: '/home/jenkins/workspace', mountPath: '/home/jenkins/workspace')
+                    ],
+                    envVars: [
+                        [key: 'DOCKER_HOST', value: 'unix:/var/run/docker.sock'], [key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/']
+                    ]
             ) {
 
                 body(
