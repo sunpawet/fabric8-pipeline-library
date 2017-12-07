@@ -42,11 +42,14 @@ def executeRobot(appName, appVersion){
 
     // sh "cat /home/jenkins/workspace/${appName}/robot/demo-peacock/testcases/test2.robot"
     sh "cat /home/jenkins/workspace/demo-peacock/robot/demo-peacock/testcases/test2.robot"
+    // sh "cp -r /home/jenkins/workspace/demo-peacock/robot/demo-peacock /home/jenkins/workspace/demo-peacock/robot/demo-peacock"
+    
+
+    // sh "docker run -dti --name=${appName}-${appVersion} -v /home/jenkins/workspace/${appName}/robot/demo-peacock:/root/home/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash -c '${cmdInstallLib}; ${cmdCreateDirectory}; ${cmdDirectory}; ${cmdRobot}'"
+    sh "docker run -dti --name=${appName}-${appVersion} -v /home/jenkins/workspace/${appName}/robot/demo-peacock:/root/home/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash"
+
     sh "sleep 10000"
-
-    // sh "docker run -dti --name=${appName}-${appVersion} -v /home/jenkins/workspace/${appName}/robot/demo-peacock:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash -c '${cmdInstallLib}; ${cmdCreateDirectory}; ${cmdDirectory}; ${cmdRobot}'"
-    sh "docker run -dti --name=${appName}-${appVersion} -v /home/jenkins/workspace/${appName}/robot/demo-peacock:/opt/robotframework/tests/${appName} ascendcorphub/robot:v1.0.0 /bin/bash"
-
+    
     // def containerId = sh(
     //     script: "docker ps -f name=${appName}-${appVersion} -q",
     //     returnStdout: true
