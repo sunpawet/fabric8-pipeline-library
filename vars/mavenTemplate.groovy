@@ -114,15 +114,25 @@ def call(Map parameters = [:], body) {
                     label: label, 
                     inheritFrom: "${inheritFrom}",
                     containers: [
-                            //[name: 'jnlp', image: "${jnlpImage}", args: '${computer.jnlpmac} ${computer.name}'],
                             [
-                                name: 'maven', image: "${mavenImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true,
+                                name: 'maven', 
+                                image: "${mavenImage}", 
+                                command: '/bin/sh -c', 
+                                args: 'cat', 
+                                ttyEnabled: true,
                                 envVars: [
-                                    [key: 'MAVEN_OPTS', value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn']
+                                    [
+                                        key: 'MAVEN_OPTS', 
+                                        value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
+                                    ]
                                 ]
                             ],
                             [
-                                name: 'robot', image: "${robotImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true
+                                name: 'robot', 
+                                image: "${robotImage}", 
+                                command: '/bin/sh -c', 
+                                args: 'cat', 
+                                ttyEnabled: true
                             ]
                     ],
                     volumes: [
@@ -133,8 +143,7 @@ def call(Map parameters = [:], body) {
                         secretVolume(secretName: 'jenkins-hub-api-token', mountPath: '/home/jenkins/.apitoken'),
                         secretVolume(secretName: 'jenkins-ssh-config', mountPath: '/root/.ssh'),
                         secretVolume(secretName: 'jenkins-git-ssh', mountPath: '/root/.ssh-git'),
-                        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
-                        // hostPathVolume(hostPath: '/home/jenkins/workspace', mountPath: '/home/jenkins/workspace')
+                        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')
                     ],
                     envVars: [
                         [key: 'DOCKER_HOST', value: 'unix:/var/run/docker.sock'], [key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/']
