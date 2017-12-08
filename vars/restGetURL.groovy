@@ -34,7 +34,8 @@ def getResult(url, authString){
     rs = new JsonSlurperClassic().parse(new InputStreamReader(connection.getInputStream(),"UTF-8"))
 
   } catch(e){
-    rs = new JsonSlurperClassic().parseText('{"build":{"version":"cannotGetvetsion"}}')
+    def mockResult = "{\"build\":{\"version\":\"cannotGetvetsion\"}}"
+    rs = new JsonSlurperClassic().parseText(mockResult)
     return rs
 
   } finally {
