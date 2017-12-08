@@ -32,6 +32,11 @@ def getResult(url, authString){
   try {
     connection.connect()
     rs = new JsonSlurperClassic().parse(new InputStreamReader(connection.getInputStream(),"UTF-8"))
+
+  } catch(err){
+    rs = new JsonSlurperClassic().parse('{"build":{"version":"cannotGetvetsion"}}')
+    return rs
+
   } finally {
     connection.disconnect()
   }
