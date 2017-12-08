@@ -35,8 +35,8 @@ def getResult(url, authString){
 
   } catch(e){
     def mockResult = "{\"build\":{\"version\":\"cannotGetvetsion\"}}"
-    rs = new JsonSlurperClassic().parseText(mockResult)
-    return rs
+    mrs = new JsonSlurperClassic().parseText('{"person":{"name":"Guillaume","age":33,"pets":["dog","cat"]}}')
+    return mrs
 
   } finally {
     connection.disconnect()
