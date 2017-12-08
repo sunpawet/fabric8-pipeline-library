@@ -33,10 +33,12 @@ def getResult(url, authString){
     connection.connect()
     rs = new JsonSlurperClassic().parse(new InputStreamReader(connection.getInputStream(),"UTF-8"))
 
-  } catch(e){
-    def mockResult = "{\"build\":{\"version\":\"Cannot get version because service not available\"}}"
-    rs = new JsonSlurperClassic().parseText(mockResult)
-  } finally {
+  } 
+  // catch(e){
+  //   def mockResult = "{\"build\":{\"version\":\"Cannot get version because service not available\"}}"
+  //   rs = new JsonSlurperClassic().parseText(mockResult)
+  // } 
+  finally {
     connection.disconnect()
   }
   echo 'returning'
