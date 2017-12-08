@@ -34,7 +34,7 @@ def getResult(url, authString){
     rs = new JsonSlurperClassic().parse(new InputStreamReader(connection.getInputStream(),"UTF-8"))
 
   } catch(e){
-    def mockResult = "{\"build\":{\"version\":\"cannotGetvetsion\"}}"
+    def mockResult = "{\"build\":{\"version\":\"Cannot get version because service not available\"}}"
     rs = new JsonSlurperClassic().parseText(mockResult)
   } finally {
     connection.disconnect()
