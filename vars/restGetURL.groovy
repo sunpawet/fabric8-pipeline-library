@@ -33,7 +33,7 @@ def getResult(url, authString){
     connection.connect()
     rs = new JsonSlurperClassic().parse(new InputStreamReader(connection.getInputStream(),"UTF-8"))
 
-  } catch(err){
+  } catch(e){
     rs = new JsonSlurperClassic().parse('{"build":{"version":"cannotGetvetsion"}}')
     return rs
 
