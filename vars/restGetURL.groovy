@@ -38,6 +38,8 @@ def getResult(url, authString){
     // mrs = new JsonSlurperClassic().parseText('{"person":{"name":"Guillaume","age":33,"pets":["dog","cat"]}}')
     // return mrs
     echo "${mockResult} TEST"
+    rs = new JsonSlurperClassic().parseText('{"person":{"name":"Guillaume","age":33,"pets":["dog","cat"]}}')
+    echo "${rs} RS"
   } finally {
     connection.disconnect()
   }
