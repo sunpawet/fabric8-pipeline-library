@@ -19,16 +19,18 @@ def call(body) {
     }*/
     def appName = config.APPNAME
     def newVersion = config.VERSION
-    def images = dockerBuild(appName,newVersion)
+    def pathDockerfile = config.PATH_DOCKERFILE
+    def images = dockerBuild(appName, newVersion, pathDockerfile)
     return images
   } // End Function
 
-def dockerBuild(appname,version){
+def dockerBuild(appname, version, pathDockerfile){
     def utils = new Utils()
     def flow = new Fabric8Commands()
     def namespace = utils.getNamespace()
     def newImageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
 
+    sh "cd ${pathDockerfile}"
     sh "sed -i \"s/#APP_VERSION#/${version}/g\" Dockerfile"
     sh "docker build -t ${newImageName} ."
     if (flow.isSingleNode()) {
