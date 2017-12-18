@@ -30,8 +30,7 @@ String environmentNamespace(String environment) {
 
 @NonCPS
 String getApiVersion() {
-  HasMetadata r = new HasMetadata()
-  def getApiVersionResult = r.getApiVersion()
+  def getApiVersionResult = io.fabric8.kubernetes.api.model.HasMetadata.getApiVersion()
   return getApiVersionResult
 }
 
