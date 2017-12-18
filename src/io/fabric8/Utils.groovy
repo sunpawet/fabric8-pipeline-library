@@ -613,10 +613,4 @@ def isKubernetesPluginVersion013(){
     return isNewVersion
 }
 
-@NonCPS
-def getVersionTMP(){
-  return io.fabric8.kubernetes.client.getApiVersion()
-
-}
-
 return this
