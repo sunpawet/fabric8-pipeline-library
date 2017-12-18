@@ -613,4 +613,11 @@ def isKubernetesPluginVersion013(){
     return isNewVersion
 }
 
+@NonCPS
+def getVersionTMP(){
+  Client client = new Client()
+  return client.getApiVersion()
+
+}
+
 return this
