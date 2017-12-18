@@ -2,7 +2,7 @@
 package io.fabric8
 
 import com.cloudbees.groovy.cps.NonCPS
-import io.fabric8.kubernetes.client.CustomResourceList
+import io.fabric8.kubernetes.api.model.HasMetadata
 import io.fabric8.kubernetes.client.DefaultKubernetesClient
 import io.fabric8.kubernetes.client.KubernetesClient
 import io.fabric8.openshift.client.DefaultOpenShiftClient
@@ -30,8 +30,8 @@ String environmentNamespace(String environment) {
 
 @NonCPS
 String getApiVersion() {
-  CustomResourceList cr = new CustomResourceList()
-  def getApiVersionResult = cr.getApiVersion()
+  HasMetadata r = new HasMetadata()
+  def getApiVersionResult = r.getApiVersion()
   return getApiVersionResult
 }
 
