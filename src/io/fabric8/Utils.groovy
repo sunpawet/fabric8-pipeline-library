@@ -4,7 +4,6 @@ package io.fabric8
 import com.cloudbees.groovy.cps.NonCPS
 import io.fabric8.kubernetes.client.DefaultKubernetesClient
 import io.fabric8.kubernetes.client.KubernetesClient
-import io.fabric8.kubernetes.client.CustomResource
 import io.fabric8.openshift.client.DefaultOpenShiftClient
 import io.fabric8.openshift.client.OpenShiftClient
 import jenkins.model.Jenkins
@@ -30,7 +29,8 @@ String environmentNamespace(String environment) {
 
 @NonCPS
 String getApiVersion() {
-  return io.fabric8.kubernetes.client.CustomResource.getApiVersion()
+  def apiVersion = getApiVersion()
+  return apiVersion
 }
 
 /**
