@@ -63,6 +63,12 @@ items:
     serviceYaml = serviceYaml.replaceAll(/#INGRESS_HOSTNAME#/, config.ingressHostname) + """
 
 """
+
+    def ingressYaml = readFile encoding: 'UTF-8', file: 'pipeline/fabric8-artifacts/' + versionKubernetes + '/application/ingress.yaml'
+    ingressYaml = ingressYaml.replaceAll(/#ENV_NAME#/, config.envName)
+    ingressYaml = ingressYaml.replaceAll(/#INGRESS_HOSTNAME#/, config.ingressHostname) + """
+
+"""
     if (networkPolicy != "ALL") {
         def networkpolicyYaml = readFile encoding: 'UTF-8', file: 'pipeline/fabric8-artifacts/' + versionKubernetes + '/application/networkpolicy.yaml'
         networkpolicyYaml = networkpolicyYaml.replaceAll(/#ENV_NAME#/, config.envName) + """
@@ -74,7 +80,11 @@ items:
     if (flow.isOpenShift()){
         yaml = list + serviceYaml + is + deploymentConfigYaml
     } else {
-        yaml = list + serviceYaml + deploymentYaml
+        if (networkPolicy != "ALL") {
+            yaml = list + serviceYaml + deploymentYaml + ingressYaml + networkpolicyYaml
+        } else {
+            yaml = list + serviceYaml + deploymentYaml + ingressYaml
+        }
     }
 
     echo 'using resources:\n' + yaml
