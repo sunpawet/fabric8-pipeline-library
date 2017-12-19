@@ -33,6 +33,7 @@ def call(body) {
         applicationType = 'mountebank'
     }
     def versionKubernetes = config.versionKubernetes
+    def networkPolicy = config.networkPolicy
 
     def sha
     def list = """
@@ -44,7 +45,6 @@ items:
     
     def namespace = utils.getNamespace()
     def imageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${config.appName}:${config.version}"
-    //def deploymentYaml = new File("${env.WORKSPACE}/pipeline/fabric8-artifacts/deployment.yaml").getText('UTF-8')
     def deploymentYaml = readFile encoding: 'UTF-8', file: 'pipeline/fabric8-artifacts/' + versionKubernetes + '/' + applicationType + '/deployment.yaml'
     deploymentYaml = deploymentYaml.replaceAll(/#GIT_HASH#/, config.gitHash)
     deploymentYaml = deploymentYaml.replaceAll(/#APP_VERSION#/, config.version)
@@ -56,7 +56,6 @@ items:
 
 """
     
-    //def serviceYaml = new File("${env.WORKSPACE}/pipeline/fabric8-artifacts/service.yaml").getText('UTF-8')
     def serviceYaml = readFile encoding: 'UTF-8', file: 'pipeline/fabric8-artifacts/' + versionKubernetes + '/' + applicationType + '/service.yaml'
     serviceYaml = serviceYaml.replaceAll(/#ENV_NAME#/, config.envName)
     serviceYaml = serviceYaml.replaceAll(/#APP_VERSION#/, config.version)
@@ -64,14 +63,21 @@ items:
     serviceYaml = serviceYaml.replaceAll(/#INGRESS_HOSTNAME#/, config.ingressHostname) + """
 
 """
+    if (networkPolicy != "ALL") {
+        def networkpolicyYaml = readFile encoding: 'UTF-8', file: 'pipeline/fabric8-artifacts/' + versionKubernetes + '/application/networkpolicy.yaml'
+        networkpolicyYaml = networkpolicyYaml.replaceAll(/#ENV_NAME#/, config.envName) + """
 
-  if (flow.isOpenShift()){
-    yaml = list + serviceYaml + is + deploymentConfigYaml
-  } else {
-    yaml = list + serviceYaml + deploymentYaml
-  }
+    """
+    }
 
-  echo 'using resources:\n' + yaml
-  return yaml
 
-  }
+    if (flow.isOpenShift()){
+        yaml = list + serviceYaml + is + deploymentConfigYaml
+    } else {
+        yaml = list + serviceYaml + deploymentYaml
+    }
+
+    echo 'using resources:\n' + yaml
+    return yaml
+
+    }
