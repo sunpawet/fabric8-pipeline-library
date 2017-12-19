@@ -30,7 +30,7 @@ def dockerBuild(appname, version, repositoryName, repositoryTag){
     def flow = new Fabric8Commands()
     def namespace = utils.getNamespace()
     
-    def newImageName = "fabric8-docker-registry:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
+    def newImageName = "fabric8-docker-registry.default.k8s-clusters.tmn-dev.com:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
     // def newImageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
 
     sh "docker pull ${repositoryName}:${repositoryTag}"
