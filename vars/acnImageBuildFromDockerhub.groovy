@@ -38,6 +38,7 @@ def dockerBuild(appname, version, repositoryName, repositoryTag){
     if (flow.isSingleNode()) {
         sh "echo 'Running on a single node, skipping docker push as not needed'"
     } else {
+        sh "sleep 10000"
         sh "docker push ${newImageName}"
     }
 
