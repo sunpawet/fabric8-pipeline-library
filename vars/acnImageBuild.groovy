@@ -27,7 +27,9 @@ def dockerBuild(appname,version){
     def utils = new Utils()
     def flow = new Fabric8Commands()
     def namespace = utils.getNamespace()
-    def newImageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
+    // fabric8-docker-registry
+    def newImageName = "fabric8-docker-registry:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
+    // def newImageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
 
     sh "sed -i \"s/#APP_VERSION#/${version}/g\" Dockerfile"
     sh "docker build -t ${newImageName} ."
