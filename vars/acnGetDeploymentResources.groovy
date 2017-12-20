@@ -60,7 +60,7 @@ items:
     serviceYaml = serviceYaml.replaceAll(/#ENV_NAME#/, config.envName)
     serviceYaml = serviceYaml.replaceAll(/#APP_VERSION#/, config.version)
     serviceYaml = serviceYaml.replaceAll(/#GIT_HASH#/, config.gitHash)
-    serviceYaml = serviceYaml.replaceAll(/#SERVICE_HOSTNAME#/, config.serviceHostname) + """
+    serviceYaml = serviceYaml.replaceAll(/#INGRESS_HOSTNAME#/, config.ingressHostname) + """
 
 """
 
