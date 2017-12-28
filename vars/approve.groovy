@@ -7,7 +7,7 @@ def call(body) {
     body.delegate = config
     body()
 
-    def timeoutTime= config.timeoutTime ?: 24
+    def timeoutTime= config.timeoutTime ?: 30
     def proceedMessage = """Would you like to promote version ${config.version} to the next environment?
 """
 
@@ -15,7 +15,7 @@ def call(body) {
     def id = approveRequestedEvent(app: "${env.JOB_NAME}", environment: config.environment)
 
     try {
-        timeout(time: timeoutTime, unit: 'HOURS') {
+        timeout(time: timeoutTime, unit: 'MINUTES') {
             input id: 'Proceed', message: "\n${proceedMessage}"
         }
     } catch (err) {
