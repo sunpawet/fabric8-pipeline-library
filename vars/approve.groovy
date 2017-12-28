@@ -20,7 +20,9 @@ def call(body) {
         }
     } catch (err) {
         approveReceivedEvent(id: id, approved: false)
-        throw err
+        return false
+        // throw err
     }
     approveReceivedEvent(id: id, approved: true)
+    return true
 }
