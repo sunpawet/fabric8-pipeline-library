@@ -34,7 +34,7 @@ def call(body) {
     }
     def versionKubernetes = config.versionKubernetes
     def networkPolicy = config.networkPolicy
-
+    def runwayName = config.runwayName ?: "FABRIC8"
     def sha
     def list = """
 ---
@@ -52,7 +52,8 @@ items:
     deploymentYaml = deploymentYaml.replaceAll(/#ENV_NAME#/, config.envName)
     deploymentYaml = deploymentYaml.replaceAll(/#APP_LANG#/, config.appLang)
     deploymentYaml = deploymentYaml.replaceAll(/#NUM_OF_REPLICA#/, config.replicaNum)
-    deploymentYaml = deploymentYaml.replaceAll(/#COUNTRY_CODE#/, config.countryCode) + """
+    deploymentYaml = deploymentYaml.replaceAll(/#COUNTRY_CODE#/, config.countryCode)
+    deploymentYaml = deploymentYaml.replaceAll(/#RUNWAY_NAME#/, runwayName) + """
 
 """
     

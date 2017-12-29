@@ -11,12 +11,6 @@ def call(body) {
 
     def flow = new io.fabric8.Fabric8Commands()
     def utils = new io.fabric8.Utils()
-
-    /*container('clients') {
-        def appName = config.APP_NAME
-        def newVersion = config.VERSION
-        dockerBuild(appName,newVersion)
-    }*/
     def appName = config.APPNAME
     def newVersion = config.VERSION
     def countryCode = config.COUNTRYCODE
