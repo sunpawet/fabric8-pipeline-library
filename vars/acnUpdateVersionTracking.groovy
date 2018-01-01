@@ -46,6 +46,7 @@ def call(body) {
     }
     sh "pip install pyyaml || true"
   } else {
+    sh "echo processingTime ${processingTime}"
     appVersion = getVersion(appName, envFabric8, pathInfo, appVersionFromBuildNumber)
     def testConditionOneLine = (rerunCondition != 'ignore') ? appVersion + "-retest" : appVersion
     sh "echo testConditionOneLine ${testConditionOneLine}"
