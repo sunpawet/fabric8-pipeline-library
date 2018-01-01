@@ -32,8 +32,8 @@ def call(body) {
   def startTimeMs = config.startTimeMs ?: "waiting"
   def endTime = config.endTime ?: "waiting"
   def endTimeMs = config.endTimeMs ?: "waiting"
-  
-  def processingTime = "waiting"
+  def processingTime = config.processingTime ?: "waiting"
+
   def file_existing = ""
   def appVersion = ""
 
@@ -46,7 +46,7 @@ def call(body) {
     }
     sh "pip install pyyaml"
   } else {
-    if ( endTimeMs != "waiting" ) {
+    if ( endTimeMs != "waiting" && endTimeMs != "skip" ) {
       processingTime = endTimeMs - startTimeMs
       processingTime = processingTime + " ms"
     }
