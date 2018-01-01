@@ -44,7 +44,7 @@ def call(body) {
         sh "cp /home/jenkins/workspace/${appName}/acm-fabric8-application/version/template/template.yaml /home/jenkins/workspace/${appName}/acm-fabric8-application/version/TH/${appName}"
         sh "mv /home/jenkins/workspace/${appName}/acm-fabric8-application/version/TH/${appName}/template.yaml /home/jenkins/workspace/${appName}/acm-fabric8-application/version/TH/${appName}/${appName}-dev.yaml"
     }
-    sh "pip install pyyaml"
+    sh "pip install pyyaml || true"
   } else {
     if ( endTimeMs != "waiting" && endTimeMs != "skip" ) {
       processingTime = endTimeMs - startTimeMs
