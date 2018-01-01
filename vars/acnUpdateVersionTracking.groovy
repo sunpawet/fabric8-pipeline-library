@@ -46,6 +46,7 @@ def call(body) {
     }
     sh "pip install pyyaml || true"
   } else {
+    sh "echo START"
     if ( endTimeMs != "waiting" && endTimeMs != "skip" ) {
       processingTime = endTimeMs - startTimeMs
       processingTime = processingTime + " ms"
@@ -56,7 +57,7 @@ def call(body) {
     if ( rerunCondition != "ignore" ) {
       appVersion = appVersion + "-retest"
     }
-    sh "python \"/home/jenkins/workspace/${appName}/acm-fabric8-application/version/version.py\" \"/home/jenkins/workspace/${appName}/acm-fabric8-application/version/TH/${appName}/${appName}-dev.yaml\" \"${appName}-${appVersion}-build-${env.BUILD_NUMBER}\" \"${rerunCondition}\" \"${status}\" \"${gitHash}\" \"${gitTag}\" \"${gitAuthor}\" \"${stage}\" \"${startTime}\" \"${endTime}\" \"${processingTime}\""
+    sh "python \"${filePathScript}\" \"${filePathYaml}\" \"${appName}-${appVersion}-build-${env.BUILD_NUMBER}\" \"${rerunCondition}\" \"${status}\" \"${gitHash}\" \"${gitTag}\" \"${gitAuthor}\" \"${stage}\" \"${startTime}\" \"${endTime}\" \"${processingTime}\""
   }
 
 } // End Main Function
