@@ -17,6 +17,7 @@ def call(body) {
   def initStatus = config.initStatus ?: "Done"
   def appName = config.appName
   // run script
+  def runwayName = config.runwayName ?: "FABRIC8"
   def envFabric8 = config.envFabric8 ?: "waiting"
   def pathInfo = config.pathInfo ?: "waiting"
   def filePathScript = config.filePathScript ?: "waiting"
@@ -27,6 +28,9 @@ def call(body) {
   def gitHash = config.gitHash ?: "waiting"
   def gitTag = config.gitTag ?: "waiting"
   def gitAuthor = config.gitAuthor ?: "waiting"
+  def gitHashFabric8Configuration = config.gitHashFabric8Configuration ?: "waiting"
+  def gitHashEcsConfiguration = config.gitHashEcsConfiguration ?: runwayName
+  def gitHashTesseractConfiguration = config.gitHashTesseractConfiguration ?: runwayName
   def stage = config.stage ?: "waiting"
   def startTime = config.startTime ?: "waiting"
   def startTimeMs = config.startTimeMs ?: "waiting"
@@ -46,14 +50,13 @@ def call(body) {
     }
     sh "pip install pyyaml || true"
   } else {
-    sh "echo processingTime ${processingTime}"
     appVersion = getVersion(appName, envFabric8, pathInfo, appVersionFromBuildNumber)
     def testConditionOneLine = (rerunCondition != 'ignore') ? appVersion + "-retest" : appVersion
     sh "echo testConditionOneLine ${testConditionOneLine}"
     if ( rerunCondition != "ignore" ) {
       appVersion = appVersion + "-retest"
     }
-    sh "python \"${filePathScript}\" \"${filePathYaml}\" \"${appName}-${appVersion}-build-${env.BUILD_NUMBER}\" \"${rerunCondition}\" \"${status}\" \"${gitHash}\" \"${gitTag}\" \"${gitAuthor}\" \"${stage}\" \"${startTime}\" \"${endTime}\" \"${processingTime}\""
+    sh "python \"${filePathScript}\" \"${filePathYaml}\" \"${appName}-${appVersion}-build-${env.BUILD_NUMBER}\" \"${rerunCondition}\" \"${runwayName}\" \"${status}\" \"${gitHash}\" \"${gitTag}\" \"${gitAuthor}\" \"${gitHashFabric8Configuration}\" \"${gitHashEcsConfiguration}\" \"${gitHashTesseractConfiguration}\" \"${stage}\" \"${startTime}\" \"${endTime}\" \"${processingTime}\""
   }
 
 } // End Main Function
