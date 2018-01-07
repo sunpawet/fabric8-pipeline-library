@@ -29,8 +29,8 @@ def call(body) {
   def gitTag = config.gitTag ?: "waiting"
   def gitAuthor = config.gitAuthor ?: "waiting"
   def gitHashFabric8Configuration = config.gitHashFabric8Configuration ?: "waiting"
-  def gitHashEcsConfiguration = config.gitHashEcsConfiguration ?: runwayName
-  def gitHashTesseractConfiguration = config.gitHashTesseractConfiguration ?: runwayName
+  def gitHashEcsConfiguration = config.gitHashEcsConfiguration ?: "None because runwayName is "+runwayName
+  def gitHashTesseractConfiguration = config.gitHashTesseractConfiguration ?: "None because runwayName is "+runwayName
   def stage = config.stage ?: "waiting"
   def startTime = config.startTime ?: "waiting"
   def startTimeMs = config.startTimeMs ?: "waiting"
