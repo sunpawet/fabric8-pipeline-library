@@ -42,11 +42,11 @@ def call(body) {
   def appVersion = ""
 
   if ( initStatus != "Done" ) {
-    sh "mkdir -p /home/jenkins/workspace/${appName}/acm-fabric8-application/version/TH/${appName}"
-    file_existing = sh script: "[ -f /home/jenkins/workspace/${appName}/acm-fabric8-application/version/TH/${appName}/${appName}.yaml ] && echo \"Found\" || echo \"Not Found\"", returnStdout: true
+    sh "mkdir -p /home/jenkins/workspace/${appName}/version/TH/${appName}"
+    file_existing = sh script: "[ -f /home/jenkins/workspace/${appName}/version/TH/${appName}/${appName}.yaml ] && echo \"Found\" || echo \"Not Found\"", returnStdout: true
     if ( file_existing.contains("Not") ) {
-        sh "cp /home/jenkins/workspace/${appName}/acm-fabric8-application/version/template/template.yaml /home/jenkins/workspace/${appName}/acm-fabric8-application/version/TH/${appName}"
-        sh "mv /home/jenkins/workspace/${appName}/acm-fabric8-application/version/TH/${appName}/template.yaml /home/jenkins/workspace/${appName}/acm-fabric8-application/version/TH/${appName}/${appName}.yaml"
+        sh "cp /home/jenkins/workspace/${appName}/version/template/template.yaml /home/jenkins/workspace/${appName}/version/TH/${appName}"
+        sh "mv /home/jenkins/workspace/${appName}/version/TH/${appName}/template.yaml /home/jenkins/workspace/${appName}/version/TH/${appName}/${appName}.yaml"
     }
     sh "pip install pyyaml || true"
   } else {
