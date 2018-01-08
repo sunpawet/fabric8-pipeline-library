@@ -35,7 +35,7 @@ def call(body) {
     def versionKubernetes = config.versionKubernetes
     def networkPolicy = config.networkPolicy
     def runwayName = config.runwayName ?: "FABRIC8"
-    def certName = config.certName
+    def certName = config.certName ?: "None"
     def sha
     def list = """
 ---
