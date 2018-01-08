@@ -35,6 +35,7 @@ def call(body) {
     def versionKubernetes = config.versionKubernetes
     def networkPolicy = config.networkPolicy
     def runwayName = config.runwayName ?: "FABRIC8"
+    def certName = config.certName
     def sha
     def list = """
 ---
@@ -67,6 +68,7 @@ items:
 
     def ingressYaml = readFile encoding: 'UTF-8', file: 'pipeline/fabric8-artifacts/' + versionKubernetes + '/' + applicationType + '/ingress.yaml'
     ingressYaml = ingressYaml.replaceAll(/#ENV_NAME#/, config.envName)
+    ingressYaml = ingressYaml.replaceAll(/#CERT_NAME#/, config.certName)
     ingressYaml = ingressYaml.replaceAll(/#INGRESS_HOSTNAME#/, config.ingressHostname) + """
 
 """
