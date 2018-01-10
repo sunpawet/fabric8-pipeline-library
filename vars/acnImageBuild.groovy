@@ -24,11 +24,9 @@ def dockerBuild(appname, version, countryCode){
     def namespace = utils.getNamespace()
     def newImageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
 
-    sh "docker build --pull -t ascendcorphub/openjdk:1.8.0_151"
-
     sh "sed -i \"s/#COUNTRY_CODE#/${countryCode}/g\" Dockerfile"
     sh "sed -i \"s/#APP_VERSION#/${version}/g\" Dockerfile"
-    sh "docker build -t ${newImageName} ."
+    sh "docker build --pull -t ${newImageName} ."
     if (flow.isSingleNode()) {
         sh "echo 'Running on a single node, skipping docker push as not needed'"
     } else {
