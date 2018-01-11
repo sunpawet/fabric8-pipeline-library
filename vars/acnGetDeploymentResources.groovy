@@ -31,12 +31,15 @@ def call(body) {
     def networkPolicy = config.networkPolicy
     def runwayName = config.runwayName ?: "FABRIC8"
     def certName = config.certName ?: "None"
-    
-    // def rollingUpdateSurge = config.replicaNum.toInteger() * 2
-    // def rollingUpdateUnavailable = 0
-    // if ( config.replicaNum.toInteger() > 1 ) {
-    //     rollingUpdateUnavailable config.replicaNum.toInteger() / 2
-    // }
+    def replicaNum = config.replicaNum
+    sh "echo replicaNum ${replicaNum}"
+    def rollingUpdateSurge = replicaNum.toInteger() * 2
+    sh "echo rollingUpdateSurge ${rollingUpdateSurge}"
+    def rollingUpdateUnavailable = 0
+    if ( replicaNum.toInteger() > 1 ) {
+        rollingUpdateUnavailable = replicaNum.toInteger() / 2
+    }
+    sh "echo rollingUpdateUnavailable ${rollingUpdateUnavailable}"
 
     def sha
     def list = """
