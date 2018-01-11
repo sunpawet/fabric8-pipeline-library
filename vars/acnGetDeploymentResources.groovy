@@ -21,11 +21,6 @@ def call(body) {
         isSha = utils.getImageStreamSha(env.JOB_NAME)
     }
 
-    /*def fabric8Registry = ''
-    if (env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST){
-        fabric8Registry = env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST+':'+env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT+'/'
-    }*/
-
     // Condition type of fabric8 artifact
     def applicationType = 'application'
     def appName = config.appName
@@ -36,6 +31,13 @@ def call(body) {
     def networkPolicy = config.networkPolicy
     def runwayName = config.runwayName ?: "FABRIC8"
     def certName = config.certName ?: "None"
+    
+    def rollingUpdateSurge = config.replicaNum.toInteger() * 2
+    def rollingUpdateUnavailable = 0
+    if ( config.replicaNum.toInteger() > 1 ) {
+        rollingUpdateUnavailable config.replicaNum.toInteger() / 2
+    }
+
     def sha
     def list = """
 ---
@@ -54,6 +56,8 @@ items:
     deploymentYaml = deploymentYaml.replaceAll(/#APP_LANG#/, config.appLang)
     deploymentYaml = deploymentYaml.replaceAll(/#NUM_OF_REPLICA#/, config.replicaNum)
     deploymentYaml = deploymentYaml.replaceAll(/#COUNTRY_CODE#/, config.countryCode)
+    deploymentYaml = deploymentYaml.replaceAll(/#ROLLING_UPDATE_SURGE#/, rollingUpdateSurge)
+    deploymentYaml = deploymentYaml.replaceAll(/#ROLLING_UPDATE_UNAVAILABLE#/, rollingUpdateUnavailable)
     deploymentYaml = deploymentYaml.replaceAll(/#RUNWAY_NAME#/, runwayName) + """
 
 """
