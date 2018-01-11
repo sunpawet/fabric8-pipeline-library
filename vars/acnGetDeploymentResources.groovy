@@ -32,11 +32,11 @@ def call(body) {
     def runwayName = config.runwayName ?: "FABRIC8"
     def certName = config.certName ?: "None"
     
-    // def rollingUpdateSurge = config.replicaNum.toInteger() * 2
-    // def rollingUpdateUnavailable = 0
-    // if ( config.replicaNum.toInteger() > 1 ) {
-    //     rollingUpdateUnavailable config.replicaNum.toInteger() / 2
-    // }
+    def rollingUpdateSurge = config.replicaNum.toInteger() * 2
+    def rollingUpdateUnavailable = 0
+    if ( config.replicaNum.toInteger() > 1 ) {
+        rollingUpdateUnavailable config.replicaNum.toInteger() / 2
+    }
 
     def sha
     def list = """
@@ -56,8 +56,8 @@ items:
     deploymentYaml = deploymentYaml.replaceAll(/#APP_LANG#/, config.appLang)
     deploymentYaml = deploymentYaml.replaceAll(/#NUM_OF_REPLICA#/, config.replicaNum)
     deploymentYaml = deploymentYaml.replaceAll(/#COUNTRY_CODE#/, config.countryCode)
-    // deploymentYaml = deploymentYaml.replaceAll(/#ROLLING_UPDATE_SURGE#/, rollingUpdateSurge)
-    // deploymentYaml = deploymentYaml.replaceAll(/#ROLLING_UPDATE_UNAVAILABLE#/, rollingUpdateUnavailable)
+    deploymentYaml = deploymentYaml.replaceAll(/#ROLLING_UPDATE_SURGE#/, rollingUpdateSurge)
+    deploymentYaml = deploymentYaml.replaceAll(/#ROLLING_UPDATE_UNAVAILABLE#/, rollingUpdateUnavailable)
     deploymentYaml = deploymentYaml.replaceAll(/#RUNWAY_NAME#/, runwayName) + """
 
 """
