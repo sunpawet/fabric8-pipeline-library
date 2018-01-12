@@ -36,6 +36,8 @@ def dockerBuild(pathDockerfile, pathWorkspaceMockdata, appname, version, country
         sh "docker build --pull -t ${newImageName} ."
         // fabric8-demo:1.0.1-1
     } else {
+        sh "echo pathDockerfile ${pathDockerfile}"
+        sh "echo pathWorkspaceMockdata ${pathWorkspaceMockdata}"
         sh "cd ${pathDockerfile} && sed -i \"s~#PATH_WORKSPACE_MOCKDATA#~${pathWorkspaceMockdata}~g\" Dockerfile"
         sh "docker build --pull -t ${newImageName} ."
         // fabric8-demo-mountebank:1.0.1-1
