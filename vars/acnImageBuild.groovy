@@ -28,15 +28,12 @@ def dockerBuild(pathWorkspaceMockdata, appname, version, countryCode){
 
     def newImageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
 
-    sh "echo pathWorkspaceMockdata ${pathWorkspaceMockdata}"
-
     if ( "${pathWorkspaceMockdata}" == "None" ) {
         sh "sed -i \"s/#COUNTRY_CODE#/${countryCode}/g\" Dockerfile"
         sh "sed -i \"s/#APP_VERSION#/${version}/g\" Dockerfile"
         sh "docker build --pull -t ${newImageName} ."
         // fabric8-demo:1.0.1-1
     } else {
-        sh "echo pathWorkspaceMockdata ${pathWorkspaceMockdata}"
         sh "cd ${pathWorkspaceMockdata} && docker build --pull -t ${newImageName} ."
         // fabric8-demo-mountebank:1.0.1-1
     }
