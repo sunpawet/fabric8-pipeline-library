@@ -40,6 +40,8 @@ def call(body) {
         rollingUpdateUnavailable = replicaNum.toInteger() / 2
     }
     sh "echo rollingUpdateUnavailable ${rollingUpdateUnavailable}"
+    def vaultSite = config.vaultSite ?: "consul.service.th-aws-alpha.consul"
+    def tokenSite = config.tokenSite ?: "alp-token.tmn-dev.com"
 
     def sha
     def list = """
@@ -59,8 +61,10 @@ items:
     deploymentYaml = deploymentYaml.replaceAll(/#APP_LANG#/, config.appLang)
     deploymentYaml = deploymentYaml.replaceAll(/#NUM_OF_REPLICA#/, config.replicaNum)
     deploymentYaml = deploymentYaml.replaceAll(/#COUNTRY_CODE#/, config.countryCode)
-    // deploymentYaml = deploymentYaml.replaceAll(/#ROLLING_UPDATE_SURGE#/, rollingUpdateSurge)
-    // deploymentYaml = deploymentYaml.replaceAll(/#ROLLING_UPDATE_UNAVAILABLE#/, rollingUpdateUnavailable)
+    deploymentYaml = deploymentYaml.replaceAll(/#ROLLING_UPDATE_SURGE#/, rollingUpdateSurge)
+    deploymentYaml = deploymentYaml.replaceAll(/#ROLLING_UPDATE_UNAVAILABLE#/, rollingUpdateUnavailable)
+    deploymentYaml = deploymentYaml.replaceAll(/#VAULT_SITE#/, vaultSite)
+    deploymentYaml = deploymentYaml.replaceAll(/#TOKEN_SITE#/, tokenSite)
     deploymentYaml = deploymentYaml.replaceAll(/#RUNWAY_NAME#/, runwayName) + """
 
 """
