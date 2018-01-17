@@ -43,6 +43,9 @@ def call(body) {
     def vaultSite = config.vaultSite ?: "consul.service.th-aws-alpha.consul"
     def tokenSite = config.tokenSite ?: "alp-token.tmn-dev.com"
 
+    sh "sed -i \"s/#ROLLING_UPDATE_SURGE#/${rollingUpdateSurge}/g\" pipeline/fabric8-artifacts/${versionKubernetes}/application/deployment.yaml"
+    sh "sed -i \"s/#ROLLING_UPDATE_UNAVAILABLE#/${rollingUpdateUnavailable}/g\" pipeline/fabric8-artifacts/${versionKubernetes}/application/deployment.yaml"
+
     def sha
     def list = """
 ---
