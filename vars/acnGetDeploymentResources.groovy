@@ -42,6 +42,7 @@ def call(body) {
     sh "echo rollingUpdateUnavailable ${rollingUpdateUnavailable}"
     def vaultSite = config.vaultSite ?: "consul.service.th-aws-alpha.consul"
     def tokenSite = config.tokenSite ?: "alp-token.tmn-dev.com"
+    def appStartupArgs = config.appStartupArgs ?: "unknown"
 
     sh "sed -i \"s/#ROLLING_UPDATE_SURGE#/${rollingUpdateSurge}/g\" pipeline/fabric8-artifacts/${versionKubernetes}/application/deployment.yaml"
     sh "sed -i \"s/#ROLLING_UPDATE_UNAVAILABLE#/${rollingUpdateUnavailable}/g\" pipeline/fabric8-artifacts/${versionKubernetes}/application/deployment.yaml"
@@ -64,8 +65,7 @@ items:
     deploymentYaml = deploymentYaml.replaceAll(/#APP_LANG#/, config.appLang)
     deploymentYaml = deploymentYaml.replaceAll(/#NUM_OF_REPLICA#/, config.replicaNum)
     deploymentYaml = deploymentYaml.replaceAll(/#COUNTRY_CODE#/, config.countryCode)
-    // deploymentYaml = deploymentYaml.replaceAll(/#ROLLING_UPDATE_SURGE#/, 1)
-    // deploymentYaml = deploymentYaml.replaceAll(/#ROLLING_UPDATE_UNAVAILABLE#/, 0)
+    deploymentYaml = deploymentYaml.replaceAll(/#APP_STARTUP_ARGS#/, config.appStartupArgs)
     deploymentYaml = deploymentYaml.replaceAll(/#VAULT_SITE#/, vaultSite)
     deploymentYaml = deploymentYaml.replaceAll(/#TOKEN_SITE#/, tokenSite)
     deploymentYaml = deploymentYaml.replaceAll(/#RUNWAY_NAME#/, runwayName) + """
