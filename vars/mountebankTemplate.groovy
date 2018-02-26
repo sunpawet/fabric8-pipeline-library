@@ -9,7 +9,7 @@ def call(Map parameters = [:], body) {
     def defaultLabel = buildId('mountebank')
     def label = parameters.get('label', defaultLabel)
 
-    def mountebankImage = parameters.get('mountebankImage', 'ascendcorphub/mountebank:v1.0.1')
+    def mountebankImage = parameters.get('mountebankImage', 'ascendcorphub/mountebank:v1.1.0')
     def jnlpImage = (flow.isOpenShift()) ? 'fabric8/jenkins-slave-base-centos7:0.0.1' : 'jenkinsci/jnlp-slave:2.62'
     def inheritFrom = parameters.get('inheritFrom', 'base')
 
