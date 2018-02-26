@@ -106,7 +106,8 @@ def call(Map parameters = [:], body) {
                         image: "${mountebankImage}", 
                         command: '/bin/bash -c', 
                         args: 'cat', 
-                        ttyEnabled: true
+                        ttyEnabled: true,
+                        alwaysPullImage: true
                     ]
                 ],
                 volumes: [

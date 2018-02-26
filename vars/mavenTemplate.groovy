@@ -125,14 +125,16 @@ def call(Map parameters = [:], body) {
                                         key: 'MAVEN_OPTS', 
                                         value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
                                     ]
-                                ]
+                                ],
+                                alwaysPullImage: true
                             ],
                             [
                                 name: 'robot', 
                                 image: "${robotImage}", 
                                 command: '/bin/sh -c', 
                                 args: 'cat', 
-                                ttyEnabled: true
+                                ttyEnabled: true,
+                                alwaysPullImage: true
                             ]
                     ],
                     volumes: [
