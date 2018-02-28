@@ -63,6 +63,7 @@ items:
     deploymentYaml = deploymentYaml.replaceAll(/#APP_VERSION#/, config.version)
     deploymentYaml = deploymentYaml.replaceAll(/#IMAGE_URL#/, imageName)
     deploymentYaml = deploymentYaml.replaceAll(/#ENV_NAME#/, config.envName)
+    deploymentYaml = deploymentYaml.replaceAll(/#TIMEZONE#/, timeZone)
     deploymentYaml = deploymentYaml.replaceAll(/#APP_LANG#/, config.appLang)
     deploymentYaml = deploymentYaml.replaceAll(/#NUM_OF_REPLICA#/, config.replicaNum)
     deploymentYaml = deploymentYaml.replaceAll(/#COUNTRY_CODE#/, config.countryCode)
