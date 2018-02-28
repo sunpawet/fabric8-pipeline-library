@@ -29,6 +29,7 @@ def call(body) {
     }
     def versionKubernetes = config.versionKubernetes
     def networkPolicy = config.networkPolicy
+    def timeZone = config.timeZone ?: "Etc/UTC"
     def runwayName = config.runwayName ?: "FABRIC8"
     def certName = config.certName ?: "None"
     def replicaNum = config.replicaNum
