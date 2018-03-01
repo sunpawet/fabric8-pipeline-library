@@ -113,6 +113,8 @@ def call(Map parameters = [:], body) {
                     cloud: cloud, 
                     label: label, 
                     inheritFrom: "${inheritFrom}",
+                    namespace: "fabric8",
+                    serviceAccount: "fabric8",
                     containers: [
                             [
                                 name: 'maven', 
