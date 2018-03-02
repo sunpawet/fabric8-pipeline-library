@@ -109,7 +109,7 @@ def call(Map parameters = [:], body) {
  //               )
   //          }
   //      } else {
-            echo "MVN building using the docker socket"
+            echo "=========================== MVN building using the docker socket ==========================="
 
             podTemplate(
                     cloud: cloud, 
@@ -138,7 +138,8 @@ def call(Map parameters = [:], body) {
                                     ]
 
                                 ],
-                                alwaysPullImage: true
+                                alwaysPullImage: true,
+                                privileged: true
                             ],
                             [
                                 name: 'robot', 
