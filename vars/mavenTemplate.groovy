@@ -109,12 +109,13 @@ def call(Map parameters = [:], body) {
  //               )
   //          }
   //      } else {
-            echo "=========================== MVN building using the docker socket ==========================="
+            echo "=========================== Image building using the docker socket ==========================="
 
             podTemplate(
                     cloud: cloud, 
                     label: label, 
                     inheritFrom: "${inheritFrom}",
+                    serviceAccount: 'jenkins',
                     containers: [
                             [
                                 name: 'maven', 
