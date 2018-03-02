@@ -16,10 +16,12 @@ def call(body) {
     def expose = config.exposeApp ?: 'true'
     def yaml
 
-    //def isSha = ''
-    //if (flow.isOpenShift()){
-    //    isSha = utils.getImageStreamSha(env.JOB_NAME)
-    //}
+    def platformType = ''
+    if (flow.isOpenShift()){
+        platformType = 'openshift-artifacts'
+    }else{
+        platformType = 'fabric8-artifacts'
+    }
 
     // Condition type of fabric8 artifact
     def applicationType = 'application'
@@ -45,8 +47,8 @@ def call(body) {
     def tokenSite = config.tokenSite ?: "alp-token.tmn-dev.com"
     def appStartupArgs = config.appStartupArgs ?: "unknown"
 
-    sh "sed -i \"s/#ROLLING_UPDATE_SURGE#/${rollingUpdateSurge}/g\" pipeline/fabric8-artifacts/${versionKubernetes}/application/deployment.yaml"
-    sh "sed -i \"s/#ROLLING_UPDATE_UNAVAILABLE#/${rollingUpdateUnavailable}/g\" pipeline/fabric8-artifacts/${versionKubernetes}/application/deployment.yaml"
+    sh "sed -i \"s/#ROLLING_UPDATE_SURGE#/${rollingUpdateSurge}/g\" pipeline/${platformType}/${versionKubernetes}/application/deployment.yaml"
+    sh "sed -i \"s/#ROLLING_UPDATE_UNAVAILABLE#/${rollingUpdateUnavailable}/g\" pipeline/${platformType}/${versionKubernetes}/application/deployment.yaml"
 
     def sha
     def list = """
@@ -58,7 +60,7 @@ items:
     
     def namespace = utils.getNamespace()
     def imageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${config.appName}:${config.version}"
-    def deploymentYaml = readFile encoding: 'UTF-8', file: 'pipeline/fabric8-artifacts/' + versionKubernetes + '/' + applicationType + '/deployment.yaml'
+    def deploymentYaml = readFile encoding: 'UTF-8', file: "pipeline/" + platformType + "/" + versionKubernetes + '/' + applicationType + '/deployment.yaml'
     deploymentYaml = deploymentYaml.replaceAll(/#GIT_HASH#/, config.gitHash)
     deploymentYaml = deploymentYaml.replaceAll(/#APP_VERSION#/, config.version)
     deploymentYaml = deploymentYaml.replaceAll(/#IMAGE_URL#/, imageName)
@@ -74,7 +76,7 @@ items:
 
 """
     
-    def serviceYaml = readFile encoding: 'UTF-8', file: 'pipeline/fabric8-artifacts/' + versionKubernetes + '/' + applicationType + '/service.yaml'
+    def serviceYaml = readFile encoding: 'UTF-8', file: "pipeline/" + platformType + "/"  + versionKubernetes + '/' + applicationType + '/service.yaml'
     serviceYaml = serviceYaml.replaceAll(/#ENV_NAME#/, config.envName)
     serviceYaml = serviceYaml.replaceAll(/#APP_VERSION#/, config.version)
     serviceYaml = serviceYaml.replaceAll(/#GIT_HASH#/, config.gitHash)
@@ -82,14 +84,14 @@ items:
 
 """
 
-    def ingressYaml = readFile encoding: 'UTF-8', file: 'pipeline/fabric8-artifacts/' + versionKubernetes + '/' + applicationType + '/ingress.yaml'
+    def ingressYaml = readFile encoding: 'UTF-8', file: "pipeline/" + platformType + "/" + versionKubernetes + '/' + applicationType + '/ingress.yaml'
     ingressYaml = ingressYaml.replaceAll(/#ENV_NAME#/, config.envName)
     ingressYaml = ingressYaml.replaceAll(/#CERT_NAME#/, certName)
     ingressYaml = ingressYaml.replaceAll(/#INGRESS_HOSTNAME#/, config.ingressHostname) + """
 
 """
     if (networkPolicy != "ALL") {
-        def networkpolicyYaml = readFile encoding: 'UTF-8', file: 'pipeline/fabric8-artifacts/' + versionKubernetes + '/application/networkpolicy.yaml'
+        def networkpolicyYaml = readFile encoding: 'UTF-8', file: "pipeline/" + platformType + "/" + versionKubernetes + '/application/networkpolicy.yaml'
         networkpolicyYaml = networkpolicyYaml.replaceAll(/#ENV_NAME#/, config.envName) + """
 
     """
