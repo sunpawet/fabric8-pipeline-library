@@ -126,7 +126,17 @@ def call(Map parameters = [:], body) {
                                     [
                                         key: 'MAVEN_OPTS', 
                                         value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
+                                    ],
+                                    [   
+                                        key: 'DOCKER_HOST',
+                                        value: 'unix:/var/run/docker.sock'
+
+                                    ],
+                                    [   
+                                        key: 'DOCKER_CONFIG',
+                                        value: '/home/jenkins/.docker/'
                                     ]
+
                                 ],
                                 alwaysPullImage: true
                             ],
