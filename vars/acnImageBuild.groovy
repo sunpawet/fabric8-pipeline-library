@@ -26,7 +26,7 @@ def dockerBuild(pathWorkspaceMockdata, appname, version, countryCode){
     def flow = new Fabric8Commands()
     def namespace = utils.getNamespace()
 
-    def newImageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
+    def newImageName = "http://${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${appname}:${version}"
 
     if ( "${pathWorkspaceMockdata}" == "None" ) {
         sh "sed -i \"s/#COUNTRY_CODE#/${countryCode}/g\" Dockerfile"
