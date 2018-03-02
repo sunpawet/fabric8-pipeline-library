@@ -128,8 +128,7 @@ def call(Map parameters = [:], body) {
                                         value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
                                     ]
                                 ],
-                                alwaysPullImage: true,
-                                privileged: true
+                                alwaysPullImage: true
                             ],
                             [
                                 name: 'robot', 
