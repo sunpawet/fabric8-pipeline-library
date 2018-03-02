@@ -85,7 +85,7 @@ def call(Map parameters = [:], body) {
     } else {
         if (utils.isUseOpenShiftS2IForBuilds()) {
             echo "=========================== Image building using the docker socket on openshift ==========================="
-            podTemplate(cloud: cloud, label: label, inheritFrom: "${inheritFrom}", serviceAccount: 'jenkins', restartPolicy: 'OnFailure',
+            podTemplate(cloud: cloud, label: label, inheritFrom: "${inheritFrom}", serviceAccount: 'jenkins', restartPolicy: 'OnFailure', nodeSelector: 'deployment-nodegroup=fabric8',
                     containers: [
                             [name: 'jnlp', image: "${jnlpImage}", args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins/',
                              resourceLimitMemory: '512Mi'], // needs to be high to work on OSO
