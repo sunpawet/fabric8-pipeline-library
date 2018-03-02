@@ -17,10 +17,13 @@ def call(body) {
     def yaml
 
     def platformType = ''
+    def deploymentYamlType = ''
     if (flow.isOpenShift()){
         platformType = 'openshift-artifacts'
+        deploymentYamlType = 'deploymentconfig'
     }else{
         platformType = 'fabric8-artifacts'
+        deploymentYamlType = 'deployment'
     }
 
     // Condition type of fabric8 artifact
@@ -47,8 +50,8 @@ def call(body) {
     def tokenSite = config.tokenSite ?: "alp-token.tmn-dev.com"
     def appStartupArgs = config.appStartupArgs ?: "unknown"
 
-    sh "sed -i \"s/#ROLLING_UPDATE_SURGE#/${rollingUpdateSurge}/g\" pipeline/${platformType}/${versionKubernetes}/application/deployment.yaml"
-    sh "sed -i \"s/#ROLLING_UPDATE_UNAVAILABLE#/${rollingUpdateUnavailable}/g\" pipeline/${platformType}/${versionKubernetes}/application/deployment.yaml"
+    sh "sed -i \"s/#ROLLING_UPDATE_SURGE#/${rollingUpdateSurge}/g\" pipeline/${platformType}/${versionKubernetes}/application/${deploymentYamlType}.yaml"
+    sh "sed -i \"s/#ROLLING_UPDATE_UNAVAILABLE#/${rollingUpdateUnavailable}/g\" pipeline/${platformType}/${versionKubernetes}/application/${deploymentYamlType}.yaml"
 
     def sha
     def list = """
@@ -60,7 +63,7 @@ items:
     
     def namespace = utils.getNamespace()
     def imageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${config.appName}:${config.version}"
-    def deploymentYaml = readFile encoding: 'UTF-8', file: "pipeline/" + platformType + "/" + versionKubernetes + '/' + applicationType + '/deployment.yaml'
+    def deploymentYaml = readFile encoding: 'UTF-8', file: "pipeline/" + platformType + "/" + versionKubernetes + '/' + applicationType + "/" + deploymentYamlType + ".yaml"
     deploymentYaml = deploymentYaml.replaceAll(/#GIT_HASH#/, config.gitHash)
     deploymentYaml = deploymentYaml.replaceAll(/#APP_VERSION#/, config.version)
     deploymentYaml = deploymentYaml.replaceAll(/#IMAGE_URL#/, imageName)
