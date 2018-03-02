@@ -88,7 +88,7 @@ def call(Map parameters = [:], body) {
                     containers: [
                             [name: 'jnlp', image: "${jnlpImage}", args: '${computer.jnlpmac} ${computer.name}', workingDir: '/home/jenkins/',
                              resourceLimitMemory: '512Mi'], // needs to be high to work on OSO
-                            [name: 'maven', image: "${mavenImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true, workingDir: '/home/jenkins/',
+                            [name: 'maven', image: "${mavenImage}", command: '/bin/sh -c', args: 'cat', ttyEnabled: true, workingDir: '/home/jenkins/', privileged: true,
                              envVars: [
                                      [key: '_JAVA_OPTIONS', value: '-Duser.home=/root/ -XX:+UseParallelGC -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xmx256m'],
                                      [key: 'MAVEN_OPTS', value: '-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn']
@@ -99,8 +99,9 @@ def call(Map parameters = [:], body) {
                               secretVolume(secretName: 'jenkins-release-gpg', mountPath: '/home/jenkins/.gnupg'),
                               secretVolume(secretName: 'jenkins-hub-api-token', mountPath: '/home/jenkins/.apitoken'),
                               secretVolume(secretName: 'jenkins-ssh-config', mountPath: '/root/.ssh'),
-                              secretVolume(secretName: 'jenkins-git-ssh', mountPath: '/root/.ssh-git')],
-                    envVars: [[key: 'GIT_COMMITTER_EMAIL', value: 'fabric8@googlegroups.com'], [key: 'GIT_COMMITTER_NAME', value: 'fabric8']]) {
+                              secretVolume(secretName: 'jenkins-git-ssh', mountPath: '/root/.ssh-git'),
+                              hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock')],
+                    envVars: [[key: 'GIT_COMMITTER_EMAIL', value: 'fabric8@googlegroups.com'], [key: 'GIT_COMMITTER_NAME', value: 'fabric8'], key: 'DOCKER_HOST', value: 'unix:/var/run/docker.sock'], [key: 'DOCKER_CONFIG', value: '/home/jenkins/.docker/']]) {
 
                 body(
 
@@ -126,7 +127,8 @@ def call(Map parameters = [:], body) {
                                         value: '-Duser.home=/root/ -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn'
                                     ]
                                 ],
-                                alwaysPullImage: true
+                                alwaysPullImage: true,
+                                privileged: true
                             ],
                             [
                                 name: 'robot', 
