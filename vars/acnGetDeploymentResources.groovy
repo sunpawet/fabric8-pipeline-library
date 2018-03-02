@@ -16,10 +16,10 @@ def call(body) {
     def expose = config.exposeApp ?: 'true'
     def yaml
 
-    def isSha = ''
-    if (flow.isOpenShift()){
-        isSha = utils.getImageStreamSha(env.JOB_NAME)
-    }
+    //def isSha = ''
+    //if (flow.isOpenShift()){
+    //    isSha = utils.getImageStreamSha(env.JOB_NAME)
+    //}
 
     // Condition type of fabric8 artifact
     def applicationType = 'application'
