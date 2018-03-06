@@ -18,12 +18,15 @@ def call(body) {
 
     def platformType = ''
     def deploymentYamlType = ''
+    def ingressYamlType = ''
     if (flow.isOpenShift()){
         platformType = 'openshift-artifacts'
         deploymentYamlType = 'deploymentconfig'
+        ingressYamlType = 'route'
     }else{
         platformType = 'fabric8-artifacts'
         deploymentYamlType = 'deployment'
+        ingressYamlType = 'ingress'
     }
 
     // Condition type of fabric8 artifact
@@ -88,7 +91,7 @@ items:
 
 """
 
-    def ingressYaml = readFile encoding: 'UTF-8', file: "pipeline/" + platformType + "/" + versionKubernetes + '/' + applicationType + '/ingress.yaml'
+    def ingressYaml = readFile encoding: 'UTF-8', file: "pipeline/" + platformType + "/" + versionKubernetes + '/' + applicationType + '/' + ingressYamlType + '.yaml'
     ingressYaml = ingressYaml.replaceAll(/#ENV_NAME#/, config.envName)
     ingressYaml = ingressYaml.replaceAll(/#CERT_NAME#/, certName)
     ingressYaml = ingressYaml.replaceAll(/#INGRESS_HOSTNAME#/, config.ingressHostname) + """
