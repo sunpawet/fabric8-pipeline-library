@@ -66,7 +66,7 @@ items:
     
     def namespace = utils.getNamespace()
     def imageName = "${env.FABRIC8_DOCKER_REGISTRY_SERVICE_HOST}:${env.FABRIC8_DOCKER_REGISTRY_SERVICE_PORT}/${namespace}/${config.appName}:${config.version}"
-    sh "echo pipeline/${platformType}/${versionKubernetes}/${applicationType}/${deploymentYamlType}.yaml"
+    //sh "echo pipeline/${platformType}/${versionKubernetes}/${applicationType}/${deploymentYamlType}.yaml"
     def deploymentYaml = readFile encoding: 'UTF-8', file: "pipeline/" + platformType + "/" + versionKubernetes + "/" + applicationType + "/" + deploymentYamlType + ".yaml"
     deploymentYaml = deploymentYaml.replaceAll(/#GIT_HASH#/, config.gitHash)
     deploymentYaml = deploymentYaml.replaceAll(/#APP_VERSION#/, config.version)
@@ -106,7 +106,11 @@ items:
 
 
     if (flow.isOpenShift()){
-        yaml = list + serviceYaml + is + deploymentConfigYaml
+        if (networkPolicy != "ALL") {
+            yaml = list + serviceYaml + deploymentYaml + ingressYaml + networkpolicyYaml
+        } else {
+            yaml = list + serviceYaml + deploymentYaml + ingressYaml
+        }
     } else {
         if (networkPolicy != "ALL") {
             yaml = list + serviceYaml + deploymentYaml + ingressYaml + networkpolicyYaml
