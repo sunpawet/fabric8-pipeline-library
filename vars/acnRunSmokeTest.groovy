@@ -45,48 +45,48 @@ def call(body) {
             sh "rm -rf /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}"
             sh "mkdir -p /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}"
             dir("/home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}") {
-                git credentialsId: 'bitbucket-credential', url: GIT_TEST
-                // scriptRunExisting = sh script: "[ -f /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh ] && echo \"Existing\" || echo \"Not Existing\"", returnStdout: true
-                scriptRunExisting = "/home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh"
-                if ( !scriptRunExisting.exists() ) {
-                  sh "echo ${GIT_INTEGRATION_TEST_NAME} DONT HAVE FILE RUN_SMOKE.SH"
-                  scriptRunExistingList.add("not_have")
-                } else {
-                  sh "echo ${GIT_INTEGRATION_TEST_NAME} HAVE FILE RUN_SMOKE.SH"
-                  scriptRunExistingList.add("have")
-                  sh "chmod +x /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh"
-                  sh "cd /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace} && ./run_smoke.sh"
-                  sh "cp -rf /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}_smoke/* /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}_smoke/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}"
-                }
+              scriptRunExisting = "/home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh"
+              git credentialsId: 'bitbucket-credential', url: GIT_TEST
+              // scriptRunExisting = sh script: "[ -f /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh ] && echo \"Existing\" || echo \"Not Existing\"", returnStdout: true
+              if ( !scriptRunExisting.exists() ) {
+                sh "echo ${GIT_INTEGRATION_TEST_NAME} DONT HAVE FILE RUN_SMOKE.SH"
+                scriptRunExistingList.add("not_have")
+              } else {
+                sh "echo ${GIT_INTEGRATION_TEST_NAME} HAVE FILE RUN_SMOKE.SH"
+                scriptRunExistingList.add("have")
+                sh "chmod +x /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh"
+                sh "cd /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace} && ./run_smoke.sh"
+                sh "cp -rf /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}_smoke/* /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}_smoke/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}"
+              }
             }
         } else if ( global_vars['GIT_INTEGRATION_TEST_LIST_COUNT'].toInteger() > 1 ) {
             def cmd_mrg = "rebot --nostatusrc --outputdir /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}_smoke/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER} --output output.xml --merge"
             for ( i = 0; i < global_vars['GIT_INTEGRATION_TEST_LIST_COUNT'].toInteger(); i++ ) {
-                sh "echo Start Git ${i} in ${global_vars['GIT_INTEGRATION_TEST_LIST_COUNT']}"
-                git_integration_test = "GIT_INTEGRATION_TEST_LIST_${i}"
-                GIT_TEST = global_vars[git_integration_test]
-                GIT_INTEGRATION_TEST_CUT = GIT_TEST.substring(GIT_TEST.lastIndexOf("/") + 1)
-                GIT_INTEGRATION_TEST_NAME = GIT_INTEGRATION_TEST_CUT.minus(".git")
-                if ( i == 0 ) {
-                    sh "rm -rf /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}"
-                    sh "mkdir -p /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}"
-                }
-                dir("/home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}") {
-                    git credentialsId: 'bitbucket-credential', url: GIT_TEST
-                    // scriptRunExisting = sh script: "[ -f /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh ] && echo \"Existing\" || echo \"Not Existing\"", returnStdout: true
-                    scriptRunExisting = "/home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh"
-                    if ( !scriptRunExisting.exists() ) {
-                      sh "echo ${GIT_INTEGRATION_TEST_NAME} DONT HAVE FILE RUN_SMOKE.SH"
-                      scriptRunExistingList.add("not_have")
-                    } else {
-                      sh "echo ${GIT_INTEGRATION_TEST_NAME} HAVE FILE RUN_SMOKE.SH"
-                      scriptRunExistingList.add("have")
-                      sh "chmod +x /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh"
-                      sh "cd /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace} && ./run_smoke.sh"
-                      sh "rsync -av --progress /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}_smoke/ /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}_smoke/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER} --exclude log.html --exclude report.html --exclude output.xml"
-                    }
-                } // End directory pull git
-                cmd_mrg = cmd_mrg + " /home/jenkins/workspace/" + global_vars['APP_NAME'] + "/robot/" + GIT_INTEGRATION_TEST_NAME + "/results/${environmentForWorkspace}_smoke/output.xml"
+              sh "echo Start Git ${i} in ${global_vars['GIT_INTEGRATION_TEST_LIST_COUNT']}"
+              git_integration_test = "GIT_INTEGRATION_TEST_LIST_${i}"
+              GIT_TEST = global_vars[git_integration_test]
+              GIT_INTEGRATION_TEST_CUT = GIT_TEST.substring(GIT_TEST.lastIndexOf("/") + 1)
+              GIT_INTEGRATION_TEST_NAME = GIT_INTEGRATION_TEST_CUT.minus(".git")
+              if ( i == 0 ) {
+                  sh "rm -rf /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}"
+                  sh "mkdir -p /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}"
+              }
+              dir("/home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}") {
+                  git credentialsId: 'bitbucket-credential', url: GIT_TEST
+                  // scriptRunExisting = sh script: "[ -f /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh ] && echo \"Existing\" || echo \"Not Existing\"", returnStdout: true
+                  scriptRunExisting = "/home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh"
+                  if ( !scriptRunExisting.exists() ) {
+                    sh "echo ${GIT_INTEGRATION_TEST_NAME} DONT HAVE FILE RUN_SMOKE.SH"
+                    scriptRunExistingList.add("not_have")
+                  } else {
+                    sh "echo ${GIT_INTEGRATION_TEST_NAME} HAVE FILE RUN_SMOKE.SH"
+                    scriptRunExistingList.add("have")
+                    sh "chmod +x /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh"
+                    sh "cd /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace} && ./run_smoke.sh"
+                    sh "rsync -av --progress /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}_smoke/ /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}_smoke/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER} --exclude log.html --exclude report.html --exclude output.xml"
+                  }
+              } // End directory pull git
+              cmd_mrg = cmd_mrg + " /home/jenkins/workspace/" + global_vars['APP_NAME'] + "/robot/" + GIT_INTEGRATION_TEST_NAME + "/results/${environmentForWorkspace}_smoke/output.xml"
             } // End loop git more than 1
             sh "${cmd_mrg}"
         } // End condition git equal 1 or more than 1
