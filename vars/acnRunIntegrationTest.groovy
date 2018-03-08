@@ -20,7 +20,7 @@ def call(body) {
   def authorizationTMTId = config.authorizationTMTId
   def test_tools = config.test_tools
 
-  def file_run_smoke_test_result = "/home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}_smoke/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}/output.xml"
+  def file_run_smoke_test_result = sh script: "[ -f /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}_smoke/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}/output.xml ] && echo \"Found\" || echo \"Not_Found\"", returnStdout: true
 
   if ( global_vars['GIT_INTEGRATION_TEST_LIST_COUNT'].toInteger() == 0 ) {
     currentBuild.result = 'UNSTABLE'
@@ -46,7 +46,7 @@ def call(body) {
         GIT_INTEGRATION_TEST_CUT = GIT_TEST.substring(GIT_TEST.lastIndexOf("/") + 1)
         GIT_INTEGRATION_TEST_NAME = GIT_INTEGRATION_TEST_CUT.minus(".git")
         if ( environmentForWorkspace == "qa" ) {
-          if ( file_run_smoke_test_result.exists() ) {
+          if ( file_run_smoke_test_result == "Found" ) {
             sh "echo HAVE RUN_SMOKE.SH"
             sh "rsync -av --progress /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}_smoke/ /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER} --exclude log.html --exclude report.html --exclude output.xml"
             cmd_mrg = cmd_mrg + " /home/jenkins/workspace/" + global_vars['APP_NAME'] + "/robot/" + GIT_INTEGRATION_TEST_NAME + "/results/${environmentForWorkspace}_smoke/output.xml"
@@ -75,7 +75,7 @@ def call(body) {
       } else if ( global_vars['GIT_INTEGRATION_TEST_LIST_COUNT'].toInteger() > 1 ) {
         sh "echo more than 1 GIT"
         if ( environmentForWorkspace == "qa" ) {
-          if ( file_run_smoke_test_result.exists() ) {
+          if ( file_run_smoke_test_result == "Found" ) {
             sh "echo HAVE RUN_SMOKE.SH"
             sh "rsync -av --progress /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}_smoke/ /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER} --exclude log.html --exclude report.html --exclude output.xml"
             cmd_mrg = cmd_mrg + " /home/jenkins/workspace/" + global_vars['APP_NAME'] + "/robot/" + GIT_INTEGRATION_TEST_NAME + "/results/${environmentForWorkspace}_smoke/output.xml"
