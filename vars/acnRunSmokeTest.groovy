@@ -47,7 +47,7 @@ def call(body) {
             dir("/home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}") {
               git credentialsId: 'bitbucket-credential', url: GIT_TEST
               scriptRunExisting = sh script: "[ -f /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh ] && echo \"Found\" || echo \"Not_Found\"", returnStdout: true
-              if ( scriptRunExisting == "Not_Found" ) {
+              if ( scriptRunExisting.contains("Not") ) {
                 sh "echo ${GIT_INTEGRATION_TEST_NAME} DONT HAVE FILE RUN_SMOKE.SH"
                 scriptRunExistingList.add("not_have")
               } else {
@@ -73,7 +73,7 @@ def call(body) {
               dir("/home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}") {
                   git credentialsId: 'bitbucket-credential', url: GIT_TEST
                   scriptRunExisting = sh script: "[ -f /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run_smoke.sh ] && echo \"Found\" || echo \"Not_Found\"", returnStdout: true
-                  if ( scriptRunExisting == "Not_Found" ) {
+                  if ( scriptRunExisting.contains("Not") ) {
                     sh "echo ${GIT_INTEGRATION_TEST_NAME} DONT HAVE FILE RUN_SMOKE.SH"
                     scriptRunExistingList.add("not_have")
                   } else {
