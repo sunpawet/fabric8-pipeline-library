@@ -89,7 +89,7 @@ def call(body) {
             sh "${cmd_mrg}"
         } // End condition git equal 1 or more than 1
 
-        if ( flagSkipQa.contains("have") ) {
+        if ( scriptRunExistingList.contains("have") ) {
           step([
             $class : 'RobotPublisher', 
             outputPath : "/home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}_smoke/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}",
@@ -130,8 +130,6 @@ def call(body) {
             slackSend (channel: "${global_vars['CHANNEL_SLACK_NOTIFICATION']}", color: '#FFFF66', message: "${env.JOB_NAME} build number ${env.BUILD_NUMBER} FAIL step Run System Integration Test on ${environmentForWorkspace} environment. ${env.BUILD_URL}")
             error "Pipeline aborted due to ${env.JOB_NAME} run system integration test ${env.BUILD_NUMBER} is FAILURE"
           } // End Condition RobotPublisher is Fail
-        } else {
-          sh "echo Dont have run_smoke.sh in git"
         } // End condition have run_smoke.sh
     } else if ( test_tools == 'jmeter' ) {
       sh "echo available in next release"
