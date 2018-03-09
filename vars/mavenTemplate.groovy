@@ -11,6 +11,7 @@ def call(Map parameters = [:], body) {
 
     def mavenImage = parameters.get('mavenImage', 'ascendcorphub/maven-builder:v1.0.0')
     def robotImage = parameters.get('robotImage', 'ascendcorphub/robot:v1.1.0')
+    def jmeterImage = parameters.get('jmeterImage', 'ascendcorphub/jmeter:v1.0.0')
     def jnlpImage = (flow.isOpenShift()) ? 'fabric8/jenkins-slave-base-centos7:0.0.1' : 'jenkinsci/jnlp-slave:2.62'
     def inheritFrom = parameters.get('inheritFrom', 'base')
 
@@ -137,6 +138,14 @@ def call(Map parameters = [:], body) {
                             [
                                 name: 'robot', 
                                 image: "${robotImage}", 
+                                command: '/bin/sh -c', 
+                                args: 'cat', 
+                                ttyEnabled: true,
+                                alwaysPullImage: true
+                            ],
+                            [
+                                name: 'jmeter', 
+                                image: "${jmeterImage}", 
                                 command: '/bin/sh -c', 
                                 args: 'cat', 
                                 ttyEnabled: true,
