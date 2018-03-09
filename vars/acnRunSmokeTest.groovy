@@ -86,7 +86,7 @@ def call(body) {
                   }
               } // End directory pull git
             } // End loop git more than 1
-            if ( !scriptRunExisting.contains("Not") ) {
+            if ( scriptRunExistingList.contains("have") ) {
               sh "${cmd_mrg}"
             }
         } // End condition git equal 1 or more than 1

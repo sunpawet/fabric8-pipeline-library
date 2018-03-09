@@ -172,57 +172,7 @@ def call(body) {
         error "Pipeline aborted due to ${env.JOB_NAME} run test ${env.BUILD_NUMBER} is FAILURE"
       } // End Condition RobotPublisher
     } else if ( test_tools == "jmeter" ) {
-
+      sh "echo JMETER"
     } // End condition for check call method in qa environment that mean merge run smoke with this result
-
-    if ( test_tools == 'robot' ) {
-
-      sh "cd /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace} && /bin/zip -r \"${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}.zip\" \"${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}/\""
-      def bucket = ""
-      if ( environmentForWorkspace == "dev" ) {
-        bucket = global_vars['BUCKET_TEST_RESULT_DEV']
-      } else if ( environmentForWorkspace == "qa" ) {
-        bucket = global_vars['BUCKET_TEST_RESULT_QA']
-      } else if ( environmentForWorkspace == "staging" ) {
-        bucket = global_vars['BUCKET_TEST_RESULT_STAGING']
-      }
-      dir("/home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}"){
-        step([
-          $class : 'S3BucketPublisher',
-          profileName : 'fabric8-profile-s3',
-          entries: [[
-            bucket: "${bucket}/robot-result/${global_vars['APP_NAME']}/${env.BUILD_NUMBER}",
-            selectedRegion: 'ap-southeast-1',
-            showDirectlyInBrowser: true,
-            sourceFile: "${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}.zip",
-            storageClass: 'STANDARD'
-          ]]
-        ])
-      }
-      sh "echo BUCKET S3 result ${environmentForWorkspace} is https://s3.console.aws.amazon.com/s3/buckets/${bucket}/robot-result/${global_vars['APP_NAME']}/${env.BUILD_NUMBER}/?region=ap-southeast-1&tab=overview"
-      sh "curl -k -H \"Authorization: ${authorizationTMTId}\" https://ascendtmt.tmn-dev.net/remote/execute/${jobTMTId}?buildno=${env.BUILD_NUMBER}"
-      step([
-        $class : 'RobotPublisher', 
-        outputPath : "/home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}",
-        passThreshold : global_vars['TEST_PASS_THRESHOLD'].toInteger(),
-        unstableThreshold: global_vars['TEST_UNSTABLE_THRESHOLD'].toInteger(), 
-        otherFiles : "*.png",
-        outputFileName: "output.xml", 
-        disableArchiveOutput: false, 
-        reportFileName: "report.html", 
-        logFileName: "log.html",
-        onlyCritical: false,
-        enableCache: false
-      ])
-      if( currentBuild.result == 'UNSTABLE' ){
-        slackSend (channel: "${global_vars['CHANNEL_SLACK_NOTIFICATION']}", color: '#FFFF66', message: "${env.JOB_NAME} build number ${env.BUILD_NUMBER} UNSTABLE step Run Integration Test on ${environmentForWorkspace} environment. Because result threshold less than '${global_vars['ROBOT_UNSTABLE_THRESHOLD']}'. ${env.BUILD_URL}")
-        error "Pipeline aborted due to ${env.JOB_NAME} run test ${env.BUILD_NUMBER} is Unstable"
-      } else if(currentBuild.result == 'FAILURE'){
-        slackSend (channel: "${global_vars['CHANNEL_SLACK_NOTIFICATION']}", color: '#FF9900', message: "${env.JOB_NAME} build number ${env.BUILD_NUMBER} FAILURE step Run Integration Test on ${environmentForWorkspace} environment. Because result threshold less than '${global_vars['ROBOT_PASS_THRESHOLD']}'. ${env.BUILD_URL}")
-        error "Pipeline aborted due to ${env.JOB_NAME} run test ${env.BUILD_NUMBER} is FAILURE"
-      } // End Condition RobotPublisher
-    } else if ( test_tools == 'jmeter' ) {
-      sh "echo available in next release"
-    } // End Condition robot or jmeter
   } // End Condition global_vars['GIT_INTEGRATION_TEST_LIST_COUNT']
 } // End Method Runtest
