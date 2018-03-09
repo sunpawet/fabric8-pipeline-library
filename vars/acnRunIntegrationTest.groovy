@@ -78,7 +78,7 @@ def call(body) {
           if ( !file_run_smoke_test_result.contains("Not") ) {
             sh "echo HAVE RUN_SMOKE.SH"
             sh "rsync -av --progress /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}_smoke/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}/ /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER} --exclude log.html --exclude report.html --exclude output.xml"
-            cmd_mrg = cmd_mrg + " /home/jenkins/workspace/" + global_vars['APP_NAME'] + "/robot/" + GIT_INTEGRATION_TEST_NAME + "/results/${environmentForWorkspace}_smoke/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}/output.xml"
+            cmd_mrg = cmd_mrg + " /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}_smoke/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}/output.xml"
             for ( i = 0; i < global_vars['GIT_INTEGRATION_TEST_LIST_COUNT'].toInteger(); i++ ) {
               sh "echo Start Git ${i} in ${global_vars['GIT_INTEGRATION_TEST_LIST_COUNT']}"
               git_integration_test = "GIT_INTEGRATION_TEST_LIST_${i}"
@@ -88,7 +88,7 @@ def call(body) {
               sh "chmod +x /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run.sh"
               sh "cd /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace} && ./run.sh"
               sh "rsync -av --progress /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}/ /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER} --exclude log.html --exclude report.html --exclude output.xml"
-              cmd_mrg = cmd_mrg + " /home/jenkins/workspace/" + global_vars['APP_NAME'] + "/robot/" + GIT_INTEGRATION_TEST_NAME + "/results/${environmentForWorkspace}/output.xml"
+              cmd_mrg = cmd_mrg + " /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}/output.xml"
             }
           } else {
             sh "echo DONT HAVE RUN_SMOKE.SH"
@@ -101,7 +101,7 @@ def call(body) {
               sh "chmod +x /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run.sh"
               sh "cd /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace} && ./run.sh"
               sh "rsync -av --progress /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}/ /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER} --exclude log.html --exclude report.html --exclude output.xml"
-              cmd_mrg = cmd_mrg + " /home/jenkins/workspace/" + global_vars['APP_NAME'] + "/robot/" + GIT_INTEGRATION_TEST_NAME + "/results/${environmentForWorkspace}/output.xml"
+              cmd_mrg = cmd_mrg + " /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}/output.xml"
             }
           }
         } else {
@@ -122,7 +122,7 @@ def call(body) {
               sh "cd /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace} && ./run.sh"
             }
             sh "rsync -av --progress /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}/ /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER} --exclude log.html --exclude report.html --exclude output.xml"
-            cmd_mrg = cmd_mrg + " /home/jenkins/workspace/" + global_vars['APP_NAME'] + "/robot/" + GIT_INTEGRATION_TEST_NAME + "/results/${environmentForWorkspace}/output.xml"
+            cmd_mrg = cmd_mrg + " /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}/output.xml"
           }
         } // End condition if run smoke test
         sh "${cmd_mrg}"
