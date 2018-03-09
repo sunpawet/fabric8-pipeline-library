@@ -105,6 +105,7 @@ def call(body) {
             onlyCritical: false,
             enableCache: false
           ]) // End robot plug-in
+          sh "cd /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}_smoke && /bin/zip -r \"${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}.zip\" \"${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}/\""
           def bucket = ""
           if ( environmentForWorkspace == "dev" ) {
             bucket = global_vars['BUCKET_TEST_RESULT_DEV']
