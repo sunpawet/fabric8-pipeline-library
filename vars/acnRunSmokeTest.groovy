@@ -130,14 +130,12 @@ def call(body) {
             } // End upload zip file to S3
             sh "echo BUCKET S3 result ${environmentForWorkspace} is https://s3.console.aws.amazon.com/s3/buckets/${bucket}/robot-result/${global_vars['APP_NAME']}/${env.BUILD_NUMBER}/?region=ap-southeast-1&tab=overview"
             sh "curl -k -H \"Authorization: ${authorizationTMTId}\" https://ascendtmt.tmn-dev.net/remote/execute/${jobTMTId}?buildno=${env.BUILD_NUMBER}"
-            slackSend (channel: "${global_vars['CHANNEL_SLACK_NOTIFICATION']}", color: '#FFFF66', message: "${env.JOB_NAME} build number ${env.BUILD_NUMBER} FAIL step Run System Integration Test on ${environmentForWorkspace} environment. ${env.BUILD_URL}")
+            slackSend (channel: "${global_vars['CHANNEL_SLACK_NOTIFICATION']}", color: '#FFFF66', message: "${env.JOB_NAME} build number ${env.BUILD_NUMBER} FAIL step Run Smoke Test on ${environmentForWorkspace} environment. ${env.BUILD_URL}")
             error "Pipeline aborted due to ${env.JOB_NAME} run system integration test ${env.BUILD_NUMBER} is FAILURE"
           } // End Condition RobotPublisher is Fail
         } // End condition have run_smoke.sh
     } else if ( test_tools == 'jmeter' ) {
-      container(name: 'jmeter'){
-        sh "echo available in next release"
-      }
+      sh "echo jmeter not run smoke test"
     } // End Condition robot or jmeter
   } // End Condition global_vars['GIT_INTEGRATION_TEST_LIST_COUNT']
 } // End Method Runtest

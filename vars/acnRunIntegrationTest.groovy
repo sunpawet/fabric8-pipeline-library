@@ -172,7 +172,65 @@ def call(body) {
         error "Pipeline aborted due to ${env.JOB_NAME} run test ${env.BUILD_NUMBER} is FAILURE"
       } // End Condition RobotPublisher
     } else if ( test_tools == "jmeter" ) {
-      sh "echo JMETER"
-    } // End condition for check call method in qa environment that mean merge run smoke with this result
+      container(name: 'jmeter'){
+        sh "mkdir -p /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}"
+        if ( global_vars['GIT_INTEGRATION_TEST_LIST_COUNT'].toInteger() == 1 ) {
+          git_integration_test = "GIT_INTEGRATION_TEST_LIST_0"
+          GIT_TEST = global_vars[git_integration_test]
+          GIT_INTEGRATION_TEST_CUT = GIT_TEST.substring(GIT_TEST.lastIndexOf("/") + 1)
+          GIT_INTEGRATION_TEST_NAME = GIT_INTEGRATION_TEST_CUT.minus(".git")
+          sh "rm -rf /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}"
+          sh "mkdir -p /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}"
+          dir("/home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}") {
+            git credentialsId: 'bitbucket-credential', url: GIT_TEST
+            sh "chmod +x /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run.sh"
+            sh "cd /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace} && ./run.sh"
+            sh "cp -rf /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}/* /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}"
+          }
+        } else if ( global_vars['GIT_INTEGRATION_TEST_LIST_COUNT'].toInteger() > 1 ) {
+          for ( i = 0; i < global_vars['GIT_INTEGRATION_TEST_LIST_COUNT'].toInteger(); i++ ) {
+            sh "echo Start Git ${i} in ${global_vars['GIT_INTEGRATION_TEST_LIST_COUNT']}"
+            git_integration_test = "GIT_INTEGRATION_TEST_LIST_${i}"
+            GIT_TEST = global_vars[git_integration_test]
+            GIT_INTEGRATION_TEST_CUT = GIT_TEST.substring(GIT_TEST.lastIndexOf("/") + 1)
+            GIT_INTEGRATION_TEST_NAME = GIT_INTEGRATION_TEST_CUT.minus(".git")
+            if ( i == 0 ) {
+                sh "rm -rf /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}"
+                sh "mkdir -p /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}"
+            }
+            dir("/home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}") {
+                git credentialsId: 'bitbucket-credential', url: GIT_TEST
+                sh "chmod +x /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace}/run.sh"
+                sh "cd /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/scripts/${environmentForWorkspace} && ./run.sh"
+                sh "cp -rf /home/jenkins/workspace/${env.JOB_NAME}/robot/${GIT_INTEGRATION_TEST_NAME}/results/${environmentForWorkspace}run/* /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}_smoke/${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}"
+            } // End directory pull git
+          } // End loop git more than 1
+          sh "cd /home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace} && /bin/zip -r \"${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}.zip\" \"${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}/\""
+          def bucket = ""
+          if ( environmentForWorkspace == "dev" ) {
+            bucket = global_vars['BUCKET_TEST_RESULT_DEV']
+          } else if ( environmentForWorkspace == "qa" ) {
+            bucket = global_vars['BUCKET_TEST_RESULT_QA']
+          } else if ( environmentForWorkspace == "staging" ) {
+            bucket = global_vars['BUCKET_TEST_RESULT_STAGING']
+          }
+          dir("/home/jenkins/workspace/${env.JOB_NAME}/robot/results/${environmentForWorkspace}"){
+            step([
+              $class : 'S3BucketPublisher',
+              profileName : 'fabric8-profile-s3',
+              entries: [[
+                bucket: "${bucket}/performance-result/${global_vars['APP_NAME']}/${env.BUILD_NUMBER}",
+                selectedRegion: 'ap-southeast-1',
+                showDirectlyInBrowser: true,
+                sourceFile: "${global_vars['APP_NAME']}-${app_version}-build-${env.BUILD_NUMBER}.zip",
+                storageClass: 'STANDARD'
+              ]]
+            ])
+          } // End upload zip file to S3
+          sh "echo BUCKET S3 result ${environmentForWorkspace} is https://s3.console.aws.amazon.com/s3/buckets/${bucket}/performance-result/${global_vars['APP_NAME']}/${env.BUILD_NUMBER}/?region=ap-southeast-1&tab=overview"
+          sh "curl -k -H \"Authorization: ${authorizationTMTId}\" https://ascendtmt.tmn-dev.net/remote/execute/${jobTMTId}?buildno=${env.BUILD_NUMBER}"
+        } // End condition git equal 1 or more than 1
+      } // End container jmeter
+    } // End condition robot or jmeter
   } // End Condition global_vars['GIT_INTEGRATION_TEST_LIST_COUNT']
 } // End Method Runtest
