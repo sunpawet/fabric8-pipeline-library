@@ -135,7 +135,9 @@ def call(body) {
           } // End Condition RobotPublisher is Fail
         } // End condition have run_smoke.sh
     } else if ( test_tools == 'jmeter' ) {
-      sh "echo available in next release"
+      container(name: 'jmeter'){
+        sh "echo available in next release"
+      }
     } // End Condition robot or jmeter
   } // End Condition global_vars['GIT_INTEGRATION_TEST_LIST_COUNT']
 } // End Method Runtest
