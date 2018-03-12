@@ -31,6 +31,7 @@ def dockerBuild(pathWorkspaceMockdata, appname, version, countryCode){
     if ( "${pathWorkspaceMockdata}" == "None" ) {
         sh "sed -i \"s/#COUNTRY_CODE#/${countryCode}/g\" Dockerfile"
         sh "sed -i \"s/#APP_VERSION#/${version}/g\" Dockerfile"
+        sh "sed -i \"s/#APP_NAME#/${appname}/g\" Dockerfile"
         sh "docker build --pull -t ${newImageName} ."
         // fabric8-demo:1.0.1-1
     } else {
