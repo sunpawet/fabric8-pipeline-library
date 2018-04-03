@@ -24,11 +24,11 @@ def call(body) {
                 "-Dsonar.projectKey=${appName} " +
                 "-Dsonar.projectName=${appName} " +
                 "-Dsonar.projectVersion=${newVersion} " +
-                '-Dsonar.language=java ' +
-                '-Dsonar.sources=src/ '+
-                '-Dsonar.tests=src/test/ '+
-                '-Dsonar.test.inclusions=**/*Test*/** '+
-                '-Dsonar.exclusions=**/*Test*/**'+
-                '-Dsonar.java.binaries=target/classes '
+                "-Dsonar.language=java" +
+                "-Dsonar.sources=src/"+
+                "-Dsonar.tests=src/test/"+
+                "-Dsonar.test.inclusions=**/*test*/**,**/*Test*/**,**/*Test*.java"+
+                "-Dsonar.exclusions=**/*test*/**,**/*Test*/**,**/*Test*.java"+
+                "-Dsonar.java.binaries=target/classes"
              }
   } // End Function
