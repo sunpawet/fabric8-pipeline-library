@@ -19,16 +19,16 @@ def call(body) {
 
     withSonarQubeEnv('sonarqube') {
                 sh "mvn versions:set -DnewVersion=${newVersion}"
-                sh 'mvn clean package sonar:sonar ' +
+                sh "mvn clean package sonar:sonar " +
                 "-Dsonar.host.url=${config.SONARQUBE_URL} " +
                 "-Dsonar.projectKey=${appName} " +
                 "-Dsonar.projectName=${appName} " +
                 "-Dsonar.projectVersion=${newVersion} " +
-                "-Dsonar.language=java" +
-                "-Dsonar.sources=src/"+
-                "-Dsonar.tests=src/test/"+
-                "-Dsonar.test.inclusions=**/*test*/**,**/*Test*/**,**/*Test*.java"+
-                "-Dsonar.exclusions=**/*test*/**,**/*Test*/**,**/*Test*.java"+
+                "-Dsonar.language=java " +
+                "-Dsonar.sources=src/ "+
+                "-Dsonar.tests=src/test/ "+
+                "-Dsonar.test.inclusions=**/*test*/**,**/*Test*/**,**/*Test*.java "+
+                "-Dsonar.exclusions=**/*test*/**,**/*Test*/**,**/*Test*.java "+
                 "-Dsonar.java.binaries=target/classes"
              }
   } // End Function
