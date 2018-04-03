@@ -29,6 +29,6 @@ def call(body) {
                 "-Dsonar.tests=src/test/ "+
                 "-Dsonar.test.inclusions=**/*test*/**,**/*Test*/**,**/*Test*.java "+
                 "-Dsonar.exclusions=**/*test*/**,**/*Test*/**,**/*Test*.java "+
-                "-Dsonar.java.binaries=target/classes"
+                "-Dsonar.java.binaries=."
              }
   } // End Function
